@@ -73,19 +73,9 @@ public class ProductRepositoryTests {
         Assertions.assertEquals(product.getDescription(),createdProduct.getDescription());
         Assertions.assertEquals(product.getPrice(),createdProduct.getPrice());
     }
-    @Test
-    public void Should_Create_New1_Product() {
-        Product product = new Product();
-        product.setName("Product3");
-        product.setDescription("Description3");
-        product.setPrice(33.33);
-        try {
-            repository.save(product);
-        }catch (Exception e){
-            System.out.println(e.getCause());
-        }
 
-    }
+
+
 
     @Test()
     public void Should_Not_Create_Existing_Product()  {
