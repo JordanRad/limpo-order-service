@@ -13,8 +13,11 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("api/products")
+@RequestMapping(ProductController.BASE_URL)
 public class ProductController {
+
+
+    public static final String BASE_URL = "api/products";
 
     @Autowired
     private ProductRepository repository;
@@ -36,38 +39,48 @@ public class ProductController {
 
         Product product = productService.getProductById(id);
 
-        return product.getId() > 0 ?
-                new ResponseEntity(product, HttpStatus.OK) :
-                new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        if(product.getId()==-1L){
+            return new ResponseEntity(product.getDescription(),HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(product, HttpStatus.OK);
 
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> createNewProduct(@RequestBody Product product) {
+    public ResponseEntity<String> createNewProduct(@RequestBody Product product) {
 
-        Product p = productService.createProduct(product);
-        return new ResponseEntity<String>(String.format("Product %s",product.getName()),HttpStatus.OK);
+        Product createdProduct = productService.createProduct(product);
+        if(createdProduct.getId()==-2L){
+            return new ResponseEntity(createdProduct.getDescription(),HttpStatus.CONFLICT);
+        }
+            return new ResponseEntity(createdProduct,HttpStatus.OK);
+
+
     }
 
     @PutMapping("/")
     public ResponseEntity<?> updateProduct(@RequestBody Product product) {
 
         Product updatedProduct = productService.updateProduct(product);
-
+        if(updatedProduct.getId()==-1L){
+            new ResponseEntity(updatedProduct.getDescription(), HttpStatus.NOT_FOUND);
+        }else if(updatedProduct.getId()==-2L){
+            new ResponseEntity(updatedProduct.getDescription(), HttpStatus.CONFLICT);
+        }
         return
-                new ResponseEntity(String.format("Product with id %d has been successfully updated", updatedProduct.getId()), HttpStatus.OK);
+                new ResponseEntity(updatedProduct, HttpStatus.OK);
 
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable long id) {
-        boolean isDeleted = productService.deleteProduct(id);
+        Product deletedProduct = productService.deleteProduct(id);
 
-        if (isDeleted) {
-            return new ResponseEntity<>(String.format("Product with name %d has just been deleted.", id), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Product cannot be deleted.", HttpStatus.NOT_FOUND);
+        if (deletedProduct.getId()==-1L) {
+            new ResponseEntity(deletedProduct.getDescription(), HttpStatus.NOT_FOUND);
         }
+            return new ResponseEntity<>(deletedProduct, HttpStatus.OK);
+
     }
 
 }

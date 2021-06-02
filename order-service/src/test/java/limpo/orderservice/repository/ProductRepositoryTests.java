@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import java.util.ArrayList;
+import java.util.List;
 
 @DataJpaTest
 @ActiveProfiles("tests")
@@ -74,21 +75,6 @@ public class ProductRepositoryTests {
         Assertions.assertEquals(product.getPrice(),createdProduct.getPrice());
     }
 
-
-
-
-    @Test()
-    public void Should_Not_Create_Existing_Product()  {
-        Product product = new Product();
-        product.setName("Product1");
-        product.setDescription("Description3");
-        product.setPrice(33.33);
-
-        repository.save(product);
-
-
-
-    }
 
     @Test
     public void Should_Update_A_Product() {
