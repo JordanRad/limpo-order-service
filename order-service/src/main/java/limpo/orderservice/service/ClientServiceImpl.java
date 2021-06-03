@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -39,7 +38,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Long deleteClient(Long id) {
-        Client client = clientRepository.findById(id).get();
+        Client client = clientRepository.findById(id).orElse(null);
         if(client != null){
             clientRepository.delete(client);
             return id;
@@ -51,7 +50,10 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client updateClient(Long id, Client client) {
-        Client client1 = clientRepository.findById(id).get();
+        Client client1 = clientRepository.findById(id).orElse(null);
+        if(client1 == null){
+            return null;
+        }
         client1.setFirstName(client.getFirstName());
         client1.setFamilyName(client.getFamilyName());
         client1.setAddress(client.getAddress());

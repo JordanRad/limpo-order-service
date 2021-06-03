@@ -2,7 +2,8 @@ package limpo.orderservice.controller;
 
 import limpo.orderservice.model.Client;
 import limpo.orderservice.service.ClientService;
-import org.apache.juli.logging.Log;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,30 +20,45 @@ public class ClientController{
     }
 
     @GetMapping
-    @ResponseBody
-    public List<Client> getAllClients(){
-        return clientService.getAllClients();
+    public ResponseEntity<?> getAllClients(){
+        List<Client> result = clientService.getAllClients();
+        return new ResponseEntity(result, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    @ResponseBody
-    public Client getClient(@PathVariable("id") Long id){
-        return clientService.getClientById(id);
+    public ResponseEntity<?> getClient(@PathVariable("id") Long id){
+        Client result = clientService.getClientById(id);
+        if(result == null){
+            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(result, HttpStatus.OK);
     }
 
     @PostMapping
-    public  Client addNewClient(@RequestBody Client client){
-        return clientService.addNewClient(client);
+    public ResponseEntity<?> addNewClient(@RequestBody Client client){
+        Client result = clientService.addNewClient(client);
+        if(client == null){
+            return new ResponseEntity(null, HttpStatus.CONFLICT);
+        }
+
+        return new ResponseEntity(result, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public Long deleteClient(@PathVariable Long id){
-        return clientService.deleteClient(id);
+    public ResponseEntity<?> deleteClient(@PathVariable Long id){
+         Long result = clientService.deleteClient(id);
+         if(result == null){
+             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+         }
+         return new ResponseEntity(result ,HttpStatus.OK);
     }
 
-    @PostMapping("/{id}")
-    public Client updateClient(@PathVariable Long id, @RequestBody Client client){
-        return clientService.updateClient(id,client);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateClient(@PathVariable Long id, @RequestBody Client client){
+        Client result = clientService.updateClient(id,client);
+        if(result == null){
+            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(result, HttpStatus.CREATED);
     }
-
 }

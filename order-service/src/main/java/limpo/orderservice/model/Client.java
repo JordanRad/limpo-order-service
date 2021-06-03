@@ -1,6 +1,8 @@
 package limpo.orderservice.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,8 @@ import javax.persistence.Id;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,16 +24,4 @@ public class Client {
     private String address;
     private Long bulstat;
 
-
-    public Client(Long id, String email, String firstName, String familyName, String address, Long bulstat) {
-        this.id = id;
-        this.email = email;
-        this.firstName = firstName;
-        this.familyName = familyName;
-        this.address = address;
-        this.bulstat = bulstat;
-    }
-
-    public Client() {
-    }
 }
