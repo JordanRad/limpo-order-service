@@ -11,7 +11,7 @@ Software product for a cleaning company startup which aims to automate some busi
                               
 ## Project Strcuture 
 This project has 2 main repositories:
-- *Limpo Admin Panel* -  where you can find the client application (link to admin)[https://github.com/JordanRad/limpo-admin.git] 
+- *Limpo Admin Panel* -  where you can find the client application [link to admin](https://github.com/JordanRad/limpo-admin.git) 
 - *Limpo Order Service* - where you can find the API (this repository)
 
 ## API Schema
