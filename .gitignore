@@ -1,3 +1,4 @@
 .idea/
 order-service/.idea/
-order-service/.gradle
+order-service/.gradle/
+order-service/build/
