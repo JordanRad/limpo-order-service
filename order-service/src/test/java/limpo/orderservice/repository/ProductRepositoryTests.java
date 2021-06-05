@@ -1,7 +1,6 @@
 package limpo.orderservice.repository;
 
 import limpo.orderservice.model.Product;
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import java.util.ArrayList;
-import java.util.List;
+
 
 @DataJpaTest
 @ActiveProfiles("tests")
@@ -110,7 +109,4 @@ public class ProductRepositoryTests {
         ArrayList<Product> result = (ArrayList<Product>)repository.findAll();
         Assertions.assertTrue(result.isEmpty());
     }
-
-
-
 }

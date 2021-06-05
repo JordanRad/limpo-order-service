@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -25,7 +23,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/getAll")
+    @GetMapping("/")
     public ResponseEntity<?> getAllProducts() {
 
         List<Product> result = productService.getAllProducts();
@@ -39,8 +37,8 @@ public class ProductController {
 
         Product product = productService.getProductById(id);
 
-        if(product.getId()==-1L){
-            return new ResponseEntity(product.getDescription(),HttpStatus.NOT_FOUND);
+        if (product == null) {
+            return new ResponseEntity("Product cannot be found", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(product, HttpStatus.OK);
 
@@ -50,10 +48,10 @@ public class ProductController {
     public ResponseEntity<String> createNewProduct(@RequestBody Product product) {
 
         Product createdProduct = productService.createProduct(product);
-        if(createdProduct.getId()==-2L){
-            return new ResponseEntity(createdProduct.getDescription(),HttpStatus.CONFLICT);
+        if (createdProduct == null) {
+            return new ResponseEntity("Product with this name already exists", HttpStatus.CONFLICT);
         }
-            return new ResponseEntity(createdProduct,HttpStatus.OK);
+        return new ResponseEntity(createdProduct, HttpStatus.OK);
 
 
     }
@@ -62,10 +60,13 @@ public class ProductController {
     public ResponseEntity<?> updateProduct(@RequestBody Product product) {
 
         Product updatedProduct = productService.updateProduct(product);
-        if(updatedProduct.getId()==-1L){
-            new ResponseEntity(updatedProduct.getDescription(), HttpStatus.NOT_FOUND);
-        }else if(updatedProduct.getId()==-2L){
-            new ResponseEntity(updatedProduct.getDescription(), HttpStatus.CONFLICT);
+
+        if (updatedProduct == null) {
+           return new ResponseEntity("Product cannot be found", HttpStatus.NOT_FOUND);
+        }
+        if (updatedProduct.getName()==null) {
+
+            return new ResponseEntity("Product with this name already exists", HttpStatus.CONFLICT);
         }
         return
                 new ResponseEntity(updatedProduct, HttpStatus.OK);
@@ -76,10 +77,10 @@ public class ProductController {
     public ResponseEntity<?> deleteProduct(@PathVariable long id) {
         Product deletedProduct = productService.deleteProduct(id);
 
-        if (deletedProduct.getId()==-1L) {
-            new ResponseEntity(deletedProduct.getDescription(), HttpStatus.NOT_FOUND);
+        if (deletedProduct == null) {
+            new ResponseEntity("Product cannot be found", HttpStatus.NOT_FOUND);
         }
-            return new ResponseEntity<>(deletedProduct, HttpStatus.OK);
+        return new ResponseEntity<>(deletedProduct, HttpStatus.OK);
 
     }
 
