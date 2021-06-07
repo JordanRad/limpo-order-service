@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping(ClientController.BASE_URL)
 public class ClientController{
 
-    public static final String BASE_URL = "/clients";
+    public static final String BASE_URL = "/api/clients";
 
     public final ClientService clientService;
     public ClientController(ClientService clientService) {
@@ -22,6 +22,9 @@ public class ClientController{
     @GetMapping
     public ResponseEntity<?> getAllClients(){
         List<Client> result = clientService.getAllClients();
+        if(result.isEmpty()){
+            return new ResponseEntity("Clients cannot be found", HttpStatus.OK);
+        }
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
@@ -29,7 +32,7 @@ public class ClientController{
     public ResponseEntity<?> getClient(@PathVariable("id") Long id){
         Client result = clientService.getClientById(id);
         if(result == null){
-            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity("No client with "+ id + " cannot be found", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(result, HttpStatus.OK);
     }
@@ -38,7 +41,7 @@ public class ClientController{
     public ResponseEntity<?> addNewClient(@RequestBody Client client){
         Client result = clientService.addNewClient(client);
         if(client == null){
-            return new ResponseEntity(null, HttpStatus.CONFLICT);
+            return new ResponseEntity("Problem occured with creating new client", HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity(result, HttpStatus.CREATED);
@@ -48,7 +51,7 @@ public class ClientController{
     public ResponseEntity<?> deleteClient(@PathVariable Long id){
          Long result = clientService.deleteClient(id);
          if(result == null){
-             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+             return new ResponseEntity("Client with id "+ id +" cannot be found", HttpStatus.NOT_FOUND);
          }
          return new ResponseEntity(result ,HttpStatus.OK);
     }
@@ -57,7 +60,7 @@ public class ClientController{
     public ResponseEntity<?> updateClient(@PathVariable Long id, @RequestBody Client client){
         Client result = clientService.updateClient(id,client);
         if(result == null){
-            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity("Client with id "+ id +" cannot be found", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(result, HttpStatus.CREATED);
     }
