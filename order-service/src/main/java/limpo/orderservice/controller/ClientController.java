@@ -1,7 +1,11 @@
 package limpo.orderservice.controller;
 
 import limpo.orderservice.model.Client;
+import limpo.orderservice.repository.ClientRepository;
+import limpo.orderservice.repository.ProductRepository;
 import limpo.orderservice.service.ClientService;
+import limpo.orderservice.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +18,11 @@ public class ClientController{
 
     public static final String BASE_URL = "/api/clients";
 
-    public final ClientService clientService;
-    public ClientController(ClientService clientService) {
-        this.clientService = clientService;
-    }
+    @Autowired
+    private ClientRepository repository;
+
+    @Autowired
+    private ClientService clientService;
 
     @GetMapping
     public ResponseEntity<?> getAllClients(){

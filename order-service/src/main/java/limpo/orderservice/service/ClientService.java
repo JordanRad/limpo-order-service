@@ -51,7 +51,7 @@ public class ClientService {
             return null;
         }
         client1.setFirstName(client.getFirstName());
-        client1.setFamilyName(client.getFamilyName());
+        client1.setLastName(client.getLastName());
         client1.setAddress(client.getAddress());
         client1.setEmail(client.getEmail());
         client1.setBulstat(client.getBulstat());

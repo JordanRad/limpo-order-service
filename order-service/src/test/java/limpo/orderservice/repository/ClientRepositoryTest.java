@@ -29,15 +29,15 @@ public class ClientRepositoryTest {
         clientOne.setBulstat(312414L);
         clientOne.setEmail("moni@moni.moni");
         clientOne.setAddress("Toltoy");
-        clientOne.setFamilyName("Manolov");
+        clientOne.setLastName("Manolov");
         clientOne.setFirstName("Moni");
 
         clientTwo = new Client();
         clientTwo.setBulstat(33131L);
         clientTwo.setEmail("tino@tino.tino");
         clientTwo.setAddress("Lozenets");
-        clientTwo.setFamilyName("Constantin");
-        clientTwo.setFirstName("Hadzhiyankov");
+        clientTwo.setLastName("Hadzhiyankov");
+        clientTwo.setFirstName("Constantin");
 
         entityManager.persist(clientOne);
         entityManager.persist(clientTwo);
@@ -51,7 +51,7 @@ public class ClientRepositoryTest {
         Assertions.assertEquals(client.getBulstat(), clientOne.getBulstat());
         Assertions.assertEquals(client.getEmail(), clientOne.getEmail());
         Assertions.assertEquals(client.getFirstName(), clientOne.getFirstName());
-        Assertions.assertEquals(client.getFamilyName(), clientOne.getFamilyName());
+        Assertions.assertEquals(client.getLastName(), clientOne.getLastName());
     }
 
     @Test
@@ -72,7 +72,7 @@ public class ClientRepositoryTest {
     public void Should_Create_New_Product(){
         Client client = new Client();
         client.setFirstName("Yordan");
-        client.setFamilyName("Radushev");
+        client.setLastName("Radushev");
         client.setAddress("Lozenets");
         client.setEmail("dani.radushev@dani.dani");
         client.setBulstat(312124L);
@@ -81,7 +81,7 @@ public class ClientRepositoryTest {
         Assertions.assertEquals(client.getBulstat(), createdClient.getBulstat());
         Assertions.assertEquals(client.getEmail(), createdClient.getEmail());
         Assertions.assertEquals(client.getFirstName(), createdClient.getFirstName());
-        Assertions.assertEquals(client.getFamilyName(), createdClient.getFamilyName());
+        Assertions.assertEquals(client.getLastName(), createdClient.getLastName());
     }
 
     @Test
@@ -89,9 +89,9 @@ public class ClientRepositoryTest {
         Long idOne = (Long) entityManager.getId(clientOne);
         var client = repository.findById(idOne).get();
 
-        client.setFamilyName("Update");
+        client.setLastName("Update");
         var updatedClient = repository.save(client);
-        Assertions.assertEquals(client.getFamilyName(),updatedClient.getFamilyName());
+        Assertions.assertEquals(client.getLastName(),updatedClient.getLastName());
 
     }
 
