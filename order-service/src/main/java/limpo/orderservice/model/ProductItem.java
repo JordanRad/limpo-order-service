@@ -21,12 +21,11 @@ public class ProductItem {
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
-
-//    @ManyToOne
-//    @JoinColumn(name="order_id", nullable=false)
-//    private Order order;
-
     private double price;
 
+    private int quantity;
+//    @ManyToOne
+//    @JoinColumn(name="order_id", nullable=false)
+//    private Order order
 
 }
