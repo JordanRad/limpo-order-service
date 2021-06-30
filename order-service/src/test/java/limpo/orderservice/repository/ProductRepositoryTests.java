@@ -10,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import java.util.ArrayList;
 
-
 @DataJpaTest
 @ActiveProfiles("tests")
 public class ProductRepositoryTests {
@@ -38,10 +37,12 @@ public class ProductRepositoryTests {
         entityManager.persist(productOne);
         entityManager.persist(productTwo);
     }
+
     @Test
     public void Should_Get_A_Single_Product() {
         Long idOne = (Long) entityManager.getId(productOne);
         Product product = repository.findById(idOne).get();
+
         Assertions.assertEquals(product.getName(),productOne.getName());
         Assertions.assertEquals(product.getDescription(),productOne.getDescription());
         Assertions.assertEquals(product.getPrice(),product.getPrice());
@@ -50,13 +51,14 @@ public class ProductRepositoryTests {
     @Test
     public void Should_Not_Get_Unknown_Product() {
         var product = repository.findById(222L);
-        Assertions.assertFalse(product.isPresent());
 
+        Assertions.assertFalse(product.isPresent());
     }
 
     @Test
     public void Should_Get_All_Products() {
         ArrayList<Product> products = (ArrayList)repository.findAll();
+
         Assertions.assertEquals(products.size(),2);
         Assertions.assertTrue(products.get(0).equals(productOne));
         Assertions.assertTrue(products.get(1).equals(productTwo));
@@ -69,24 +71,22 @@ public class ProductRepositoryTests {
         product.setDescription("Description3");
         product.setPrice(33.33);
         Product createdProduct = repository.save(product);
+
         Assertions.assertEquals(product.getName(),createdProduct.getName());
         Assertions.assertEquals(product.getDescription(),createdProduct.getDescription());
         Assertions.assertEquals(product.getPrice(),createdProduct.getPrice());
     }
-
 
     @Test
     public void Should_Update_A_Product() {
         Long idOne = (Long) entityManager.getId(productOne);
         var product = repository.findById(idOne).get();
 
-
         product.setName("Updated");
         var updatedProduct = repository.save(product);
+
         Assertions.assertEquals(product.getName(),updatedProduct.getName());
-
     }
-
 
     @Test
     public void Should_Delete_A_Product() {
@@ -96,6 +96,7 @@ public class ProductRepositoryTests {
         repository.delete(productOne);
 
         ArrayList<Product> result = (ArrayList<Product>)repository.findAll();
+
         Assertions.assertTrue(result.size()==1);
         Assertions.assertEquals(result.get(0).getName(),productTwo.getName());
         Assertions.assertEquals(result.get(0).getDescription(),productTwo.getDescription());
@@ -104,9 +105,10 @@ public class ProductRepositoryTests {
 
     @Test
     public void Should_Delete_All_Products() {
-
         repository.deleteAll();
+
         ArrayList<Product> result = (ArrayList<Product>)repository.findAll();
+
         Assertions.assertTrue(result.isEmpty());
     }
 }

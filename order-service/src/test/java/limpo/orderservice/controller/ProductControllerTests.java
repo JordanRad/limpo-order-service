@@ -36,8 +36,8 @@ public class ProductControllerTests {
     @Autowired
     private ProductRepository repository;
 
-
     long productId;
+
     @BeforeEach
     public void setup(){
         Product productOne = new Product();

@@ -67,6 +67,6 @@ public class ClientController{
         if(result == null){
             return new ResponseEntity("Client with id "+ id +" cannot be found", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(result, HttpStatus.CREATED);
+        return new ResponseEntity(result, HttpStatus.OK);
     }
 }

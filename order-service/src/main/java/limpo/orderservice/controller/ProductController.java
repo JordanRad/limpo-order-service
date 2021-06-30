@@ -14,7 +14,6 @@ import java.util.List;
 @RequestMapping(ProductController.BASE_URL)
 public class ProductController {
 
-
     public static final String BASE_URL = "api/products";
 
     @Autowired
