@@ -118,7 +118,7 @@ public class ProductControllerTests {
         product.setDescription("Updated Description");
         product.setPrice(5.55);
 
-        this.mockMvc.perform(put("/api/products/")
+        this.mockMvc.perform(put("/api/products/"+productId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJSONString(product)))
                 .andDo(print())

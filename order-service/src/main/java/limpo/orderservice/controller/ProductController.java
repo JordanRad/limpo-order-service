@@ -45,20 +45,19 @@ public class ProductController {
 
     @PostMapping("/")
     public ResponseEntity<String> createNewProduct(@RequestBody Product product) {
-
         Product createdProduct = productService.createProduct(product);
+
         if (createdProduct == null) {
             return new ResponseEntity("Product with this name already exists", HttpStatus.CONFLICT);
         }
+
         return new ResponseEntity(createdProduct, HttpStatus.OK);
-
-
     }
 
-    @PutMapping("/")
-    public ResponseEntity<?> updateProduct(@RequestBody Product product) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody Product product) {
 
-        Product updatedProduct = productService.updateProduct(product);
+        Product updatedProduct = productService.updateProduct(id,product);
 
         if (updatedProduct == null) {
            return new ResponseEntity("Product cannot be found", HttpStatus.NOT_FOUND);

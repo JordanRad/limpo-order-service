@@ -1,12 +1,11 @@
 package limpo.orderservice.controller;
 
-import limpo.orderservice.repository.ClientRepository;
 import limpo.orderservice.repository.OrderRepository;
-import limpo.orderservice.service.ClientService;
 import limpo.orderservice.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(OrderController.BASE_URL)
@@ -18,4 +17,68 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @GetMapping("/new")
+    public ResponseEntity<?> getAllNewOrders() {
+
+        // TODO: 01/07/2021
+        return new ResponseEntity("", HttpStatus.OK);
+
+    }
+
+    @GetMapping("/pending")
+    public ResponseEntity<?> getAllPendingOrders() {
+
+        // TODO: 01/07/2021
+        return new ResponseEntity("", HttpStatus.OK);
+
+    }
+
+    @GetMapping("/approved")
+    public ResponseEntity<?> getAllApprovedOrders() {
+
+        // TODO: 01/07/2021
+        return new ResponseEntity("", HttpStatus.OK);
+
+    }
+
+    @GetMapping("/completed")
+    public ResponseEntity<?> getAllCompletedOrders() {
+
+        // TODO: 01/07/2021
+        return new ResponseEntity("", HttpStatus.OK);
+
+    }
+
+    @GetMapping("/{orderNumber}")
+    public ResponseEntity<?> getOrderByOrderNumber() {
+
+        // TODO: 01/07/2021
+        return new ResponseEntity("", HttpStatus.OK);
+
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<?> createOrder() {
+
+        // TODO: 01/07/2021
+        return new ResponseEntity("", HttpStatus.OK);
+
+    }
+
+    @PutMapping("/{orderNumber}")
+    public ResponseEntity<?> updateOrder() {
+
+        // TODO: 01/07/2021
+        return new ResponseEntity("", HttpStatus.OK);
+
+    }
+
+    @DeleteMapping("/{orderNumber}")
+    public ResponseEntity<?> deleteOrder() {
+
+        // TODO: 01/07/2021
+        return new ResponseEntity("", HttpStatus.OK);
+
+    }
 }
