@@ -18,32 +18,16 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping("/new")
-    public ResponseEntity<?> getAllNewOrders() {
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllOrders() {
 
         // TODO: 01/07/2021
         return new ResponseEntity("", HttpStatus.OK);
 
     }
 
-    @GetMapping("/pending")
-    public ResponseEntity<?> getAllPendingOrders() {
-
-        // TODO: 01/07/2021
-        return new ResponseEntity("", HttpStatus.OK);
-
-    }
-
-    @GetMapping("/approved")
-    public ResponseEntity<?> getAllApprovedOrders() {
-
-        // TODO: 01/07/2021
-        return new ResponseEntity("", HttpStatus.OK);
-
-    }
-
-    @GetMapping("/completed")
-    public ResponseEntity<?> getAllCompletedOrders() {
+    @GetMapping("/")
+    public ResponseEntity<?> getAllOrdersByStatus(@RequestParam String status) {
 
         // TODO: 01/07/2021
         return new ResponseEntity("", HttpStatus.OK);

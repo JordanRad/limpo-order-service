@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,7 +24,7 @@ public class Order {
     private String orderNumber;
 
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
-    private Set<ProductItem> productItems;
+    private List<ProductItem> productItems;
 
     @OneToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")

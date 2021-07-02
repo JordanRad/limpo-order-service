@@ -1,6 +1,5 @@
 package limpo.orderservice.controller;
 
-
 import limpo.orderservice.model.Product;
 import limpo.orderservice.repository.ProductRepository;
 import net.minidev.json.JSONObject;
@@ -14,15 +13,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest

@@ -22,15 +22,15 @@ public class Product {
 
     private double price;
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Product) {
-            Product product = (Product) obj;
-            boolean equalsName = product.getName() == this.name;
-            return equalsName;
-        }
-        return false;
-    }
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (obj instanceof Product) {
+//            Product product = (Product) obj;
+//            boolean equalsName = product.getName() == this.name;
+//            return equalsName;
+//        }
+//        return false;
+//    }
 
 
 }
