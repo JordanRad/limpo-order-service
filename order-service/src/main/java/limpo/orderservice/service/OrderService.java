@@ -2,12 +2,13 @@ package limpo.orderservice.service;
 
 import limpo.orderservice.model.Order;
 import limpo.orderservice.model.Product;
+import limpo.orderservice.model.ProductItem;
+import limpo.orderservice.model.Status;
 import limpo.orderservice.repository.OrderRepository;
 import limpo.orderservice.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.stream.events.Comment;
 import java.util.ArrayList;
 
 @Service
@@ -16,12 +17,15 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     /**
      * Get all orders
      */
     public ArrayList<Order> getAllOrders() {
-        // TODO: 01/07/2021
-        return new ArrayList<>();
+        ArrayList<Order> orders = (ArrayList<Order>) orderRepository.findAll();
+        return orders;
     }
 
     /**
@@ -30,24 +34,42 @@ public class OrderService {
      * @param statusFilter
      */
     public ArrayList<Order> getAllOrders(String statusFilter) {
-        // TODO: 01/07/2021
-        return new ArrayList<>();
+        Status status = Status.NEW;
+
+        switch (statusFilter) {
+            case "PENDING":
+                status = Status.PENDING;
+                break;
+            case "APPROVED":
+                status = Status.APPROVED;
+                break;
+            case "COMPLETED":
+                status = Status.COMPLETED;
+
+
+        }
+
+        ArrayList<Order> orders = (ArrayList<Order>) orderRepository.findAllOrdersByStatus(status);
+
+        return orders;
     }
 
 
-    public Order getOrderByNumber() {
-        // TODO: 01/07/2021
-        return new Order();
+    public Order getOrderByNumber(String orderNumber) {
+        Order order = new Order();
+
+        order = orderRepository.findByOrderNumber(orderNumber).get();
+
+        return order;
     }
 
-    public Order createOrder() {
-        // TODO: 01/07/2021
-        return new Order();
+    public Order createOrder(Order order) {
+        return orderRepository.save(order);
     }
 
-    public Order updateOrder() {
-        // TODO: 01/07/2021
-        return new Order();
+
+    public Order updateOrder(Order updatedOrder) {
+        // TODO: 06/07/2021  
     }
 
     public Order deleteOrder() {
