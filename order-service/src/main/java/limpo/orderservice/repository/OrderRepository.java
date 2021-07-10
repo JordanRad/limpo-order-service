@@ -17,6 +17,6 @@ public interface OrderRepository extends CrudRepository<Order,Long> {
     @Query("SELECT o FROM Order o WHERE o.orderNumber = :orderNumber")
     Optional<Order> findByOrderNumber(String orderNumber);
 
-    @Query("DELETE o FROM Order o WHERE o.orderNumber = :orderNumber")
+    @Query("DELETE FROM Order o WHERE o.orderNumber = :orderNumber")
     Optional<Order> deleteByOrderNumber(String orderNumber);
 }
