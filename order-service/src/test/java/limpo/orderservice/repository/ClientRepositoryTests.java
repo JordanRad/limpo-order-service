@@ -10,10 +10,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import java.util.ArrayList;
 
-
 @DataJpaTest
 @ActiveProfiles("tests")
-public class ClientRepositoryTest {
+public class ClientRepositoryTests {
     @Autowired
     private TestEntityManager entityManager;
 
@@ -47,6 +46,7 @@ public class ClientRepositoryTest {
     public void Should_Get_A_Single_Client(){
         Long idOne = (Long) entityManager.getId(clientOne);
         Client client = repository.findById(idOne).get();
+
         Assertions.assertEquals(client.getAddress(), clientOne.getAddress());
         Assertions.assertEquals(client.getBulstat(), clientOne.getBulstat());
         Assertions.assertEquals(client.getEmail(), clientOne.getEmail());
@@ -57,12 +57,14 @@ public class ClientRepositoryTest {
     @Test
     public void Should_Not_Get_Unknown_Client(){
         var client = repository.findById(222L);
+
         Assertions.assertFalse(client.isPresent());
     }
 
     @Test
     public void Should_Get_All_Products(){
         ArrayList<Client> clients = (ArrayList<Client>)repository.findAll();
+
         Assertions.assertEquals(clients.size(),2);
         Assertions.assertTrue(clients.get(0).equals(clientOne));
         Assertions.assertTrue(clients.get(1).equals(clientTwo));
@@ -77,6 +79,7 @@ public class ClientRepositoryTest {
         client.setEmail("dani.radushev@dani.dani");
         client.setBulstat(312124L);
         Client createdClient = repository.save(client);
+
         Assertions.assertEquals(client.getAddress(), createdClient.getAddress());
         Assertions.assertEquals(client.getBulstat(), createdClient.getBulstat());
         Assertions.assertEquals(client.getEmail(), createdClient.getEmail());
@@ -103,6 +106,7 @@ public class ClientRepositoryTest {
         repository.delete(clientOne);
 
         ArrayList<Client> result = (ArrayList<Client>)repository.findAll();
+
         Assertions.assertTrue(result.size() == 1);
         Assertions.assertEquals(result.get(0).getEmail(),clientTwo.getEmail());
     }
@@ -111,6 +115,7 @@ public class ClientRepositoryTest {
     public void Should_Delete_All_Products(){
         repository.deleteAll();
         ArrayList<Client> result = (ArrayList<Client>)repository.findAll();
+
         Assertions.assertTrue(result.isEmpty());
     }
 }

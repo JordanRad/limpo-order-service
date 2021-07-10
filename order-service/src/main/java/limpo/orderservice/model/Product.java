@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="products")
+@Table(name = "products")
 public class Product {
 
     @Id
@@ -22,10 +22,8 @@ public class Product {
 
     private double price;
 
-    public boolean equals(Product obj) {
-        boolean equalsName = obj.getName() == this.name;
-        boolean equalsPrice = obj.getPrice() == this.price;
+//    For example - "ЧИСТЕНЕ НА ВХОДОВЕ"
+    private String type;
 
-        return equalsName && equalsPrice ? true:false;
-    }
+
 }

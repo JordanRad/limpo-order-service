@@ -40,8 +40,8 @@ public class ProductService {
 
     }
 
-    public Product updateProduct(Product obj) {
-        var updatedProduct = productRepository.findById(obj.getId()).orElse(null);
+    public Product updateProduct(long id, Product obj) {
+        var updatedProduct = productRepository.findById(id).orElse(null);
         if (updatedProduct == null) {
             return null;
         }
