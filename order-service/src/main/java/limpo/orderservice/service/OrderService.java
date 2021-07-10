@@ -6,6 +6,7 @@ import limpo.orderservice.model.ProductItem;
 import limpo.orderservice.model.Status;
 import limpo.orderservice.repository.OrderRepository;
 import limpo.orderservice.repository.ProductRepository;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,11 +70,17 @@ public class OrderService {
 
 
     public Order updateOrder(Order updatedOrder) {
-        // TODO: 06/07/2021  
+        Order order = orderRepository.findByOrderNumber(updatedOrder.getOrderNumber()).get();
+
+        order.setStatus(updatedOrder.getStatus());
+        order.setClient(updatedOrder.getClient());
+        order.setProductItems(updatedOrder.getProductItems());
+
+        return new Order();
     }
 
-    public Order deleteOrder() {
-        // TODO: 01/07/2021
-        return new Order();
+    public Order deleteOrder(String orderNumber) {
+        Order deletedOrder = orderRepository.deleteByOrderNumber(orderNumber).get();
+        return deletedOrder;
     }
 }
