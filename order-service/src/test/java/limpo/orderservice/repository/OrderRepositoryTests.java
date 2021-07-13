@@ -69,7 +69,7 @@ public class OrderRepositoryTests {
 
         Assertions.assertEquals(order.getClient().getEmail(),orderOne.getClient().getEmail());
         Assertions.assertEquals(order.getOrderNumber(),orderOne.getOrderNumber());
-        Assertions.assertTrue(order.getProductItems().size()==1);
+        Assertions.assertEquals(order.getProductItems().size(), 1);
         Assertions.assertEquals(order.getProductItems().get(0),orderOne.getProductItems().get(0));
     }
 
@@ -85,7 +85,7 @@ public class OrderRepositoryTests {
         ArrayList<Order> orders = (ArrayList)repository.findAll();
 
         Assertions.assertEquals(orders.size(),1);
-        Assertions.assertTrue(orders.get(0).equals(orderOne));
+        Assertions.assertEquals(orderOne, orders.get(0));
     }
 
     @Test
@@ -122,7 +122,7 @@ public class OrderRepositoryTests {
 
         Assertions.assertEquals(createdOrder.getClient().getEmail(),client.getEmail());
         Assertions.assertEquals(createdOrder.getOrderNumber(),order.getOrderNumber());
-        Assertions.assertTrue(createdOrder.getProductItems().size()==2);
+        Assertions.assertEquals(createdOrder.getProductItems().size(), 2);
         Assertions.assertEquals(createdOrder.getProductItems().get(0),order.getProductItems().get(0));
         Assertions.assertEquals(createdOrder.getProductItems().get(1),order.getProductItems().get(1));
 
@@ -148,7 +148,7 @@ public class OrderRepositoryTests {
 
         ArrayList<Order> result = (ArrayList<Order>)repository.findAll();
 
-        Assertions.assertTrue(result.size()==0);
+        Assertions.assertEquals(result.size(), 0);
     }
 
 }
