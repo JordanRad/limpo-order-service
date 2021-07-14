@@ -8,12 +8,11 @@ import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.*;
 import java.util.List;
 
-
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="clients")
+@Table(name = "clients")
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

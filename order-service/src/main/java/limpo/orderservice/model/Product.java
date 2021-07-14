@@ -18,12 +18,17 @@ public class Product {
     @Column(unique = true)
     private String name;
 
-    private String description;
-
+    //    Единична цена
     private double price;
 
-//    For example - "ЧИСТЕНЕ НА ВХОДОВЕ"
+    //    Брой пъти извършване на услуга
+    private int quantity;
+
+    //    For example - "ЧИСТЕНЕ НА ВХОД"
     private String type;
+
+    //    Подробно обяснение на услугата
+    private String description;
 
 
 }
