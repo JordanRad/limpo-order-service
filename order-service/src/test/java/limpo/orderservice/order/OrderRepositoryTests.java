@@ -1,10 +1,6 @@
 package limpo.orderservice.order;
 
 import limpo.orderservice.client.Client;
-import limpo.orderservice.order.OrderRepository;
-import limpo.orderservice.order.Order;
-import limpo.orderservice.order.ProductItem;
-import limpo.orderservice.order.Status;
 import limpo.orderservice.product.Product;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,7 +53,7 @@ public class OrderRepositoryTests {
         orderOne = new Order();
         orderOne.setClient(clientOne);
         orderOne.setOrderNumber("11111111");
-        ArrayList<ProductItem> items = new ArrayList();
+        ArrayList<ProductItem> items = new ArrayList<ProductItem>();
         items.add(productItemOne);
         orderOne.setProductItems(items);
 
@@ -68,7 +64,7 @@ public class OrderRepositoryTests {
     }
 
     @Test
-    public void Should_Get_A_Single_Order() {
+    public void shouldGetASingleOrder() {
         Long idOne = (Long) entityManager.getId(orderOne);
         Order order = repository.findById(idOne).get();
 
@@ -79,22 +75,22 @@ public class OrderRepositoryTests {
     }
 
     @Test
-    public void Should_Not_Get_Unknown_Order() {
+    public void shouldNotGetUnknownOrder() {
         var order = repository.findById(222L);
 
         Assertions.assertFalse(order.isPresent());
     }
 
     @Test
-    public void Should_Get_All_Orders() {
-        ArrayList<Order> orders = (ArrayList)repository.findAll();
+    public void shouldGetAllOrders() {
+        ArrayList<Order> orders = (ArrayList<Order>)repository.findAll();
 
         Assertions.assertEquals(orders.size(),1);
         Assertions.assertEquals(orderOne, orders.get(0));
     }
 
     @Test
-    public void Should_Create_New_Product() {
+    public void shouldCreateNewOrder() {
         Product product = new Product();
         product.setName("Product2");
         product.setDescription("Description2");
@@ -135,7 +131,7 @@ public class OrderRepositoryTests {
     }
 
     @Test
-    public void Should_Update_An_Order() {
+    public void shouldUpdateAnOrder() {
         Long idOne = (Long) entityManager.getId(orderOne);
         var order = repository.findById(idOne).get();
 
@@ -146,7 +142,7 @@ public class OrderRepositoryTests {
     }
 
     @Test
-    public void Should_Delete_An_Order() {
+    public void shouldDeleteAnOrder() {
         Long idOne = (Long) entityManager.getId(orderOne);
         var order = repository.findById(idOne).get();
 
@@ -155,6 +151,13 @@ public class OrderRepositoryTests {
         ArrayList<Order> result = (ArrayList<Order>)repository.findAll();
 
         Assertions.assertEquals(result.size(), 0);
+    }
+
+    @Test
+    public  void shouldGetAnOrderByOrderNumber(){
+        var order = repository.findByOrderNumber(orderOne.getOrderNumber()).get();
+
+        Assertions.assertEquals(order.getClient(), orderOne.getClient());
     }
 
 }

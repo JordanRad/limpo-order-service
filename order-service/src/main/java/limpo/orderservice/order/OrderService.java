@@ -1,5 +1,6 @@
 package limpo.orderservice.order;
 
+import com.sun.xml.bind.v2.TODO;
 import limpo.orderservice.client.Client;
 import limpo.orderservice.client.ClientService;
 import limpo.orderservice.product.Product;
@@ -27,6 +28,11 @@ public class OrderService {
     @Autowired
     private ProductService productService;
 
+    /**
+     * This method returns the enum status value from a string
+     * @param statusFilter Status name
+     * @return Status enum value
+     */
     private Status getStatus(String statusFilter) {
         Status status;
         switch (statusFilter) {
@@ -38,12 +44,19 @@ public class OrderService {
                 break;
             case "COMPLETED":
                 status = Status.COMPLETED;
+                break;
             default:
                 status = Status.NEW;
         }
         return status;
     }
 
+    // TODO: 25/07/2021 - Throw an error when product was not found 
+    /**
+     * The method creates an ProductItem objects out of Product object
+     * @param order An order with products
+     * @return List of product items
+     */
     private ArrayList<ProductItem> getItems(Order order) {
         //Enter product items
         ArrayList<ProductItem> items = new ArrayList<ProductItem>();
@@ -67,7 +80,6 @@ public class OrderService {
 
     /**
      * Get all orders based on a status filter - example (statusFilter = "PENDING")
-     *
      * @param statusFilter status criteria
      */
     public ArrayList<Order> getAllOrders(String statusFilter) {
@@ -78,6 +90,11 @@ public class OrderService {
     }
 
 
+    /**
+     * Get an order by its order number
+     * @param orderNumber Order number string
+     * @return Order
+     */
     public Order getOrderByNumber(String orderNumber) {
         return orderRepository.findByOrderNumber(orderNumber).orElse(null);
     }
@@ -103,22 +120,34 @@ public class OrderService {
         order.setProductItems(items);
 
         Order createdOrder =  orderRepository.save(order);
-        createdOrder.setOrderNumber(new SimpleDateFormat("dd.MM.yyyy/HH:mm").format(new Date())+"L"+createdOrder.getId());
+        createdOrder.setOrderNumber(new SimpleDateFormat("ddMMyyyy").format(new Date())+"L"+createdOrder.getId());
         return orderRepository.save(createdOrder);
     }
 
-
+    /**
+     * Update order status
+     * @param orderNumber Order number string
+     * @param status Status to be promoted
+     * @return Updated order
+     */
     public Order updateOrder(String orderNumber, String status) {
-        Order order = orderRepository.findByOrderNumber(orderNumber).orElse(null);
+        Order updatedOrder = orderRepository.findByOrderNumber(orderNumber).orElse(null);
 
-        if (order != null) {
+        if (updatedOrder != null) {
             Status updatedStatus = getStatus(status);
-            order.setStatus(updatedStatus);
+            updatedOrder.setStatus(updatedStatus);
+            orderRepository.save(updatedOrder);
+            return updatedOrder;
         }
 
         return new Order();
     }
 
+    /**
+     * Delete an order by its order number
+     * @param orderNumber Order number string
+     * @return Deleted order
+     */
     public Order deleteOrder(String orderNumber) {
         Order orderToDelete = orderRepository.findByOrderNumber(orderNumber).orElse(null);
 

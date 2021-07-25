@@ -38,7 +38,7 @@ public class OrderController {
     public ResponseEntity<Order> getOrderByOrderNumber(@PathVariable String orderNumber) {
         Order order = orderService.getOrderByNumber(orderNumber);
 
-        if (order.equals(null)) {
+        if (order ==null) {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
         }
 

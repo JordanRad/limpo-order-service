@@ -40,7 +40,7 @@ public class ClientController {
     @PostMapping
     public ResponseEntity<?> addNewClient(@RequestBody Client client) {
         Client result = clientService.addNewClient(client);
-        if (client == null) {
+        if (client.getFirstName()== null) {
             return new ResponseEntity("Problem occured with creating new client", HttpStatus.CONFLICT);
         }
 
