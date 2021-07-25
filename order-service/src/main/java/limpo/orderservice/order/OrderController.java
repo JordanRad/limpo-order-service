@@ -1,8 +1,5 @@
-package limpo.orderservice.controller;
+package limpo.orderservice.order;
 
-import limpo.orderservice.model.Order;
-import limpo.orderservice.repository.OrderRepository;
-import limpo.orderservice.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +10,8 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping(OrderController.BASE_URL)
 public class OrderController {
-    public static final String BASE_URL = "/api/orders";
+
+    public static final String BASE_URL = "/api/v1/order-service/orders";
 
     @Autowired
     private OrderRepository repository;
@@ -31,7 +29,7 @@ public class OrderController {
 
     @GetMapping("/")
     public ResponseEntity<Order> getAllOrdersByStatus(@RequestParam String status) {
-    ArrayList<Order> orders = orderService.getAllOrders(status);
+        ArrayList<Order> orders = orderService.getAllOrders(status);
 
         return new ResponseEntity(orders, HttpStatus.OK);
     }
@@ -40,7 +38,7 @@ public class OrderController {
     public ResponseEntity<Order> getOrderByOrderNumber(@PathVariable String orderNumber) {
         Order order = orderService.getOrderByNumber(orderNumber);
 
-        if (order.equals(null)){
+        if (order.equals(null)) {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
         }
 
@@ -51,22 +49,22 @@ public class OrderController {
     public ResponseEntity<Order> createOrder(@RequestBody Order order) {
         Order createdOrder = orderService.createOrder(order);
 
-        if(createdOrder.equals(null)){
-            return new ResponseEntity(createdOrder, HttpStatus.CONFLICT);
+        if (createdOrder == null) {
+            return new ResponseEntity("", HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity(createdOrder, HttpStatus.CREATED);
     }
 
     @PutMapping("/{orderNumber}")
-    public ResponseEntity<Order> updateOrder(@RequestBody Order order) {
-        Order updatedOrder = orderService.updateOrder(order);
+    public ResponseEntity<Order> updateOrder(@PathVariable String orderNumber, @RequestParam String status) {
+        Order updatedOrder = orderService.updateOrder(orderNumber, status);
 
-        if(updatedOrder.equals(null)){
+        if (updatedOrder == null) {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
         }
 
-        if (updatedOrder.getOrderNumber()==null) {
+        if (updatedOrder.getOrderNumber() == null) {
 
             return new ResponseEntity(null, HttpStatus.CONFLICT);
         }
@@ -79,7 +77,7 @@ public class OrderController {
     public ResponseEntity<Order> deleteOrder(@PathVariable String orderNumber) {
         Order deletedOrder = orderService.deleteOrder(orderNumber);
 
-        if (deletedOrder.equals(null)){
+        if (deletedOrder == null) {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
         }
 

@@ -1,6 +1,7 @@
-package limpo.orderservice.repository;
+package limpo.orderservice.client;
 
-import limpo.orderservice.model.Client;
+import limpo.orderservice.client.Client;
+import limpo.orderservice.client.ClientRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -66,8 +67,8 @@ public class ClientRepositoryTests {
         ArrayList<Client> clients = (ArrayList<Client>)repository.findAll();
 
         Assertions.assertEquals(clients.size(),2);
-        Assertions.assertTrue(clients.get(0).equals(clientOne));
-        Assertions.assertTrue(clients.get(1).equals(clientTwo));
+        Assertions.assertEquals(clientOne, clients.get(0));
+        Assertions.assertEquals(clientTwo, clients.get(1));
     }
 
     @Test
@@ -107,7 +108,7 @@ public class ClientRepositoryTests {
 
         ArrayList<Client> result = (ArrayList<Client>)repository.findAll();
 
-        Assertions.assertTrue(result.size() == 1);
+        Assertions.assertEquals(result.size(), 1);
         Assertions.assertEquals(result.get(0).getEmail(),clientTwo.getEmail());
     }
 

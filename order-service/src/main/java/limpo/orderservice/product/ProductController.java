@@ -1,12 +1,10 @@
-package limpo.orderservice.controller;
+package limpo.orderservice.product;
 
-import limpo.orderservice.model.Product;
-import limpo.orderservice.repository.ProductRepository;
-import limpo.orderservice.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -14,7 +12,7 @@ import java.util.List;
 @RequestMapping(ProductController.BASE_URL)
 public class ProductController {
 
-    public static final String BASE_URL = "api/products";
+    public static final String BASE_URL = "api/v1/order-service/products";
 
     @Autowired
     private ProductRepository repository;
@@ -57,12 +55,12 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody Product product) {
 
-        Product updatedProduct = productService.updateProduct(id,product);
+        Product updatedProduct = productService.updateProduct(id, product);
 
         if (updatedProduct == null) {
-           return new ResponseEntity("Product cannot be found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity("Product cannot be found", HttpStatus.NOT_FOUND);
         }
-        if (updatedProduct.getName()==null) {
+        if (updatedProduct.getName() == null) {
 
             return new ResponseEntity("Product with this name already exists", HttpStatus.CONFLICT);
         }

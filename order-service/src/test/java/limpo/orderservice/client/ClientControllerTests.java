@@ -1,7 +1,5 @@
-package limpo.orderservice.controller;
+package limpo.orderservice.client;
 
-import limpo.orderservice.model.Client;
-import limpo.orderservice.repository.ClientRepository;
 import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -36,8 +33,10 @@ public class ClientControllerTests {
 
     long clientId;
 
+    private final String URL = "/api/v1/order-service/clients/";
+
     @BeforeEach
-    public void setup(){
+    public void setup() {
         Client clientOne = new Client();
         clientOne.setBulstat(312418L);
         clientOne.setEmail("client@mail.com");
@@ -47,7 +46,7 @@ public class ClientControllerTests {
         clientOne.setPhone("0888888888");
 
         Client c1 = repository.save(clientOne);
-        clientId=c1.getId();
+        clientId = c1.getId();
 
         Client clientTwo = new Client();
         clientTwo.setBulstat(312415L);
@@ -62,11 +61,11 @@ public class ClientControllerTests {
 
 
     @AfterEach
-    public void delete(){
+    public void delete() {
         repository.deleteAll();
     }
 
-    public String toJSONString(Client client){
+    public String toJSONString(Client client) {
         Map<String, String> map = new HashMap<>();
         //map.put("id",Long.toString(client.getId()>0?client.getId():-1L));
         map.put("firstName", client.getFirstName());
@@ -82,7 +81,7 @@ public class ClientControllerTests {
 
     @Test
     public void Should_Return_All_Clients_And_Status_200() throws Exception {
-        this.mockMvc.perform(get("/api/clients/"))
+        this.mockMvc.perform(get(URL))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -91,7 +90,7 @@ public class ClientControllerTests {
 
     @Test
     public void Should_Return_A_Client_And_Status_200() throws Exception {
-        this.mockMvc.perform(get("/api/clients/"+clientId))
+        this.mockMvc.perform(get(URL + clientId))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -110,7 +109,7 @@ public class ClientControllerTests {
         client.setFirstName("NewClient");
         client.setPhone("0777777777");
 
-        this.mockMvc.perform(post("/api/clients/")
+        this.mockMvc.perform(post(URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJSONString(client)))
                 .andDo(print())
@@ -118,8 +117,8 @@ public class ClientControllerTests {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.firstName", is(client.getFirstName())))
                 .andExpect(jsonPath("$.email", is(client.getEmail())))
-                .andExpect(jsonPath("$.lastName",is(client.getLastName())))
-                .andExpect(jsonPath("$.address",is(client.getAddress())));
+                .andExpect(jsonPath("$.lastName", is(client.getLastName())))
+                .andExpect(jsonPath("$.address", is(client.getAddress())));
     }
 
     @Test
@@ -132,7 +131,7 @@ public class ClientControllerTests {
         client.setBulstat(712416L);
         client.setEmail("updatedlient@mail.com");
 
-        this.mockMvc.perform(put("/api/clients/"+clientId)
+        this.mockMvc.perform(put(URL + clientId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJSONString(client)))
                 .andDo(print())
@@ -140,7 +139,7 @@ public class ClientControllerTests {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.firstName", is(client.getFirstName())))
                 .andExpect(jsonPath("$.email", is(client.getEmail())))
-                .andExpect(jsonPath("$.lastName",is(client.getLastName())))
-                .andExpect(jsonPath("$.address",is(client.getAddress())));
+                .andExpect(jsonPath("$.lastName", is(client.getLastName())))
+                .andExpect(jsonPath("$.address", is(client.getAddress())));
     }
 }

@@ -1,13 +1,12 @@
-package limpo.orderservice.model;
+package limpo.orderservice.order;
 
+import limpo.orderservice.client.Client;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -18,6 +17,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String createdAt;
 
     @Column(unique = true)

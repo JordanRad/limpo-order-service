@@ -1,6 +1,5 @@
-package limpo.orderservice.service;
-import limpo.orderservice.model.Client;
-import limpo.orderservice.repository.ClientRepository;
+package limpo.orderservice.client;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +20,11 @@ public class ClientService {
         return result;
     }
 
+    public Client getClientByEmail(String email) {
+        Client client = clientRepository.findByEmail(email).orElse(null);
+        return client;
+    }
+
     public Client getClientById(Long id) {
         Client client = clientRepository.findById(id).orElse(null);
         return client;
@@ -28,23 +32,29 @@ public class ClientService {
     }
 
     public Client addNewClient(Client client) {
-        return clientRepository.save(client);
+        Client result;
+        try {
+            result = clientRepository.save(client);
+        } catch (Exception e) {
+            return null;
+        }
+
+        return result;
     }
 
     public Long deleteClient(Long id) {
         Client client = clientRepository.findById(id).orElse(null);
-        if(client != null){
+        if (client != null) {
             clientRepository.delete(client);
             return id;
-        }
-        else{
+        } else {
             return null;
         }
     }
 
     public Client updateClient(Long id, Client client) {
         Client client1 = clientRepository.findById(id).orElse(null);
-        if(client1 == null){
+        if (client1 == null) {
             return null;
         }
         client1.setFirstName(client.getFirstName());
@@ -52,6 +62,14 @@ public class ClientService {
         client1.setAddress(client.getAddress());
         client1.setEmail(client.getEmail());
         client1.setBulstat(client.getBulstat());
-        return clientRepository.save(client1);
+        client1.setType(client.getType());
+        client1.setVATNumber(client.getVATNumber());
+
+        try {
+            clientRepository.save(client1);
+        } catch (Exception e) {
+            return new Client();
+        }
+        return client1;
     }
 }

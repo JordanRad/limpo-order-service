@@ -1,4 +1,4 @@
-package limpo.orderservice.model;
+package limpo.orderservice.product;
 
 import lombok.*;
 
@@ -20,9 +20,6 @@ public class Product {
 
     //    Единична цена
     private double price;
-
-    //    Брой пъти извършване на услуга
-    private int quantity;
 
     //    For example - "ЧИСТЕНЕ НА ВХОД"
     private String type;

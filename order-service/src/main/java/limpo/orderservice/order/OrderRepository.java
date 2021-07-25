@@ -1,7 +1,7 @@
-package limpo.orderservice.repository;
+package limpo.orderservice.order;
 
-import limpo.orderservice.model.Order;
-import limpo.orderservice.model.Status;
+import limpo.orderservice.order.Order;
+import limpo.orderservice.order.Status;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -16,7 +16,4 @@ public interface OrderRepository extends CrudRepository<Order,Long> {
 
     @Query("SELECT o FROM Order o WHERE o.orderNumber = :orderNumber")
     Optional<Order> findByOrderNumber(String orderNumber);
-
-    @Query("DELETE FROM Order o WHERE o.orderNumber = :orderNumber")
-    Optional<Order> deleteByOrderNumber(String orderNumber);
 }

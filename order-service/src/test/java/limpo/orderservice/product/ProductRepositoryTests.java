@@ -1,6 +1,7 @@
-package limpo.orderservice.repository;
+package limpo.orderservice.product;
 
-import limpo.orderservice.model.Product;
+import limpo.orderservice.product.Product;
+import limpo.orderservice.product.ProductRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,11 +58,11 @@ public class ProductRepositoryTests {
 
     @Test
     public void Should_Get_All_Products() {
-        ArrayList<Product> products = (ArrayList)repository.findAll();
+        ArrayList<Product> products = (ArrayList<Product>)repository.findAll();
 
         Assertions.assertEquals(products.size(),2);
-        Assertions.assertTrue(products.get(0).equals(productOne));
-        Assertions.assertTrue(products.get(1).equals(productTwo));
+        Assertions.assertEquals(productOne, products.get(0));
+        Assertions.assertEquals(productTwo, products.get(1));
     }
 
     @Test
@@ -97,7 +98,7 @@ public class ProductRepositoryTests {
 
         ArrayList<Product> result = (ArrayList<Product>)repository.findAll();
 
-        Assertions.assertTrue(result.size()==1);
+        Assertions.assertEquals(result.size(), 1);
         Assertions.assertEquals(result.get(0).getName(),productTwo.getName());
         Assertions.assertEquals(result.get(0).getDescription(),productTwo.getDescription());
         Assertions.assertEquals(result.get(0).getPrice(),productTwo.getPrice());

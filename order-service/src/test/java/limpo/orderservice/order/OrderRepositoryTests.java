@@ -1,6 +1,11 @@
-package limpo.orderservice.repository;
+package limpo.orderservice.order;
 
-import limpo.orderservice.model.*;
+import limpo.orderservice.client.Client;
+import limpo.orderservice.order.OrderRepository;
+import limpo.orderservice.order.Order;
+import limpo.orderservice.order.ProductItem;
+import limpo.orderservice.order.Status;
+import limpo.orderservice.product.Product;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +29,7 @@ public class OrderRepositoryTests {
 
     private Client clientOne;
 
-    private  Product productOne;
+    private Product productOne;
 
     private ProductItem productItemOne;
 
@@ -108,6 +113,7 @@ public class OrderRepositoryTests {
         productItem.setPrice(product.getPrice());
         productItem.setProduct(product);
         productItem.setQuantity(2);
+
 
         Order order = new Order();
         order.setClient(client);

@@ -1,7 +1,5 @@
-package limpo.orderservice.service;
+package limpo.orderservice.product;
 
-import limpo.orderservice.model.Product;
-import limpo.orderservice.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +46,7 @@ public class ProductService {
         updatedProduct.setName(obj.getName());
         updatedProduct.setDescription(obj.getDescription());
         updatedProduct.setPrice(obj.getPrice());
+        updatedProduct.setType(obj.getType());
         try {
             productRepository.save(updatedProduct);
         } catch (Exception e) {

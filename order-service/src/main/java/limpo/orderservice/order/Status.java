@@ -1,4 +1,4 @@
-package limpo.orderservice.model;
+package limpo.orderservice.order;
 
 public enum Status {
     NEW,PENDING,APPROVED,COMPLETED,CANCELED
