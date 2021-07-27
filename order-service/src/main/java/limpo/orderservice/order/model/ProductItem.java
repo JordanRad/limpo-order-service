@@ -1,6 +1,6 @@
-package limpo.orderservice.order;
+package limpo.orderservice.order.model;
 
-import limpo.orderservice.product.Product;
+import limpo.orderservice.product.model.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,5 +1,7 @@
 package limpo.orderservice.product;
 
+import limpo.orderservice.product.model.Product;
+import limpo.orderservice.product.repository.ProductRepository;
 import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,15 +1,18 @@
 package limpo.orderservice.client;
 
-import limpo.orderservice.client.Client;
-import limpo.orderservice.client.ClientRepository;
+import limpo.orderservice.client.model.Client;
+import limpo.orderservice.client.repository.ClientRepository;
+import limpo.orderservice.client.service.ClientService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 @DataJpaTest
 @ActiveProfiles("tests")
@@ -19,6 +22,9 @@ public class ClientRepositoryTests {
 
     @Autowired
     private ClientRepository repository;
+
+    @MockBean
+    private ClientService service;
 
     private Client clientOne;
     private Client clientTwo;
@@ -44,9 +50,8 @@ public class ClientRepositoryTests {
     }
 
     @Test
-    public void Should_Get_A_Single_Client(){
-        Long idOne = (Long) entityManager.getId(clientOne);
-        Client client = repository.findById(idOne).get();
+    public void shouldFindClientByEmail(){
+        Client client = repository.findByEmail(clientOne.getEmail()).orElseThrow(NoSuchElementException::new);
 
         Assertions.assertEquals(client.getAddress(), clientOne.getAddress());
         Assertions.assertEquals(client.getBulstat(), clientOne.getBulstat());
@@ -56,16 +61,20 @@ public class ClientRepositoryTests {
     }
 
     @Test
-    public void Should_Not_Get_Unknown_Client(){
-        var client = repository.findById(222L);
+    public void shouldNotFindClientByEmail(){
+        Client client = repository.findByEmail("wrongEmail").orElse(null);
+        Assertions.assertNull(client);
+    }
 
-        Assertions.assertFalse(client.isPresent());
+    @Test
+    public void Should_Not_Get_Unknown_Client(){
+        Client client = service.getClientById(976L);
+        Assertions.assertNull(client);
     }
 
     @Test
     public void Should_Get_All_Products(){
         ArrayList<Client> clients = (ArrayList<Client>)repository.findAll();
-
         Assertions.assertEquals(clients.size(),2);
         Assertions.assertEquals(clientOne, clients.get(0));
         Assertions.assertEquals(clientTwo, clients.get(1));
@@ -91,8 +100,9 @@ public class ClientRepositoryTests {
     @Test
     public void Should_Update_A_Product(){
         Long idOne = (Long) entityManager.getId(clientOne);
-        var client = repository.findById(idOne).get();
+        var client = repository.findById(idOne).orElse(null);
 
+        assert client != null;
         client.setLastName("Update");
         var updatedClient = repository.save(client);
         Assertions.assertEquals(client.getLastName(),updatedClient.getLastName());
@@ -112,11 +122,4 @@ public class ClientRepositoryTests {
         Assertions.assertEquals(result.get(0).getEmail(),clientTwo.getEmail());
     }
 
-    @Test
-    public void Should_Delete_All_Products(){
-        repository.deleteAll();
-        ArrayList<Client> result = (ArrayList<Client>)repository.findAll();
-
-        Assertions.assertTrue(result.isEmpty());
-    }
 }

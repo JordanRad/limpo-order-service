@@ -1,5 +1,6 @@
-package limpo.orderservice.product;
+package limpo.orderservice.product.repository;
 
+import limpo.orderservice.product.model.Product;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

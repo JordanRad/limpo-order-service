@@ -1,4 +1,4 @@
-package limpo.orderservice.product;
+package limpo.orderservice.product.model;
 
 import lombok.*;
 

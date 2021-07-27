@@ -1,5 +1,6 @@
-package limpo.orderservice.client;
+package limpo.orderservice.client.repository;
 
+import limpo.orderservice.client.model.Client;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

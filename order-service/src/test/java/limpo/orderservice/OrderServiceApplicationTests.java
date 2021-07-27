@@ -1,8 +1,8 @@
 package limpo.orderservice;
 
-import limpo.orderservice.client.ClientController;
-import limpo.orderservice.order.OrderController;
-import limpo.orderservice.product.ProductController;
+import limpo.orderservice.client.controller.ClientController;
+import limpo.orderservice.order.controller.OrderController;
+import limpo.orderservice.product.controller.ProductController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

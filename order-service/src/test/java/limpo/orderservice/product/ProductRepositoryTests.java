@@ -1,7 +1,7 @@
 package limpo.orderservice.product;
 
-import limpo.orderservice.product.Product;
-import limpo.orderservice.product.ProductRepository;
+import limpo.orderservice.product.model.Product;
+import limpo.orderservice.product.repository.ProductRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

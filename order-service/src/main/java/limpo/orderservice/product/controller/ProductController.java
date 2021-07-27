@@ -1,5 +1,8 @@
-package limpo.orderservice.product;
+package limpo.orderservice.product.controller;
 
+import limpo.orderservice.product.repository.ProductRepository;
+import limpo.orderservice.product.service.ProductService;
+import limpo.orderservice.product.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,51 +25,46 @@ public class ProductController {
 
     @GetMapping("/")
     public ResponseEntity<?> getAllProducts() {
-
         List<Product> result = productService.getAllProducts();
 
-        return new ResponseEntity(result, HttpStatus.OK);
-
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(@PathVariable long id) {
-
         Product product = productService.getProductById(id);
 
         if (product == null) {
-            return new ResponseEntity("Product cannot be found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Product cannot be found", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(product, HttpStatus.OK);
 
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity<String> createNewProduct(@RequestBody Product product) {
+    public ResponseEntity<?> createNewProduct(@RequestBody Product product) {
         Product createdProduct = productService.createProduct(product);
 
         if (createdProduct == null) {
-            return new ResponseEntity("Product with this name already exists", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Product with this name already exists", HttpStatus.CONFLICT);
         }
 
-        return new ResponseEntity(createdProduct, HttpStatus.OK);
+        return new ResponseEntity<>(createdProduct, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody Product product) {
-
         Product updatedProduct = productService.updateProduct(id, product);
 
         if (updatedProduct == null) {
-            return new ResponseEntity("Product cannot be found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Product cannot be found", HttpStatus.NOT_FOUND);
         }
         if (updatedProduct.getName() == null) {
 
-            return new ResponseEntity("Product with this name already exists", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Product with this name already exists", HttpStatus.CONFLICT);
         }
-        return
-                new ResponseEntity(updatedProduct, HttpStatus.OK);
 
+        return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -74,10 +72,10 @@ public class ProductController {
         Product deletedProduct = productService.deleteProduct(id);
 
         if (deletedProduct == null) {
-            new ResponseEntity("Product cannot be found", HttpStatus.NOT_FOUND);
+            new ResponseEntity<>("Product cannot be found", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(deletedProduct, HttpStatus.OK);
 
+        return new ResponseEntity<>(deletedProduct, HttpStatus.OK);
     }
 
 }

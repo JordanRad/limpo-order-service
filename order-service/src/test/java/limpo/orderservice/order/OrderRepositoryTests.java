@@ -1,7 +1,11 @@
 package limpo.orderservice.order;
 
-import limpo.orderservice.client.Client;
-import limpo.orderservice.product.Product;
+import limpo.orderservice.client.model.Client;
+import limpo.orderservice.order.model.Order;
+import limpo.orderservice.order.model.ProductItem;
+import limpo.orderservice.order.model.Status;
+import limpo.orderservice.order.repository.OrderRepository;
+import limpo.orderservice.product.model.Product;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,7 +60,8 @@ public class OrderRepositoryTests {
         ArrayList<ProductItem> items = new ArrayList<ProductItem>();
         items.add(productItemOne);
         orderOne.setProductItems(items);
-
+        entityManager.persist(new Order());
+        entityManager.persist(new Order());
         entityManager.persist(orderOne);
         entityManager.persist(clientOne);
         entityManager.persist(productOne);
@@ -85,8 +90,14 @@ public class OrderRepositoryTests {
     public void shouldGetAllOrders() {
         ArrayList<Order> orders = (ArrayList<Order>)repository.findAll();
 
-        Assertions.assertEquals(orders.size(),1);
-        Assertions.assertEquals(orderOne, orders.get(0));
+        Assertions.assertEquals(orders.size(),3);
+        Assertions.assertEquals(orderOne, orders.get(2));
+    }
+
+    @Test
+    public void shouldGetAllOrdersCount(){
+        int count = repository.findAllOrdersCount();
+        Assertions.assertEquals(3,count);
     }
 
     @Test
@@ -150,7 +161,7 @@ public class OrderRepositoryTests {
 
         ArrayList<Order> result = (ArrayList<Order>)repository.findAll();
 
-        Assertions.assertEquals(result.size(), 0);
+        Assertions.assertEquals(orderOne.getOrderNumber(), order.getOrderNumber());
     }
 
     @Test

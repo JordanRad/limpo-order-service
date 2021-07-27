@@ -1,11 +1,8 @@
-package limpo.orderservice.order;
+package limpo.orderservice.order.service;
 
-import com.sun.xml.bind.v2.TODO;
-import limpo.orderservice.client.Client;
-import limpo.orderservice.client.ClientService;
-import limpo.orderservice.product.Product;
-import limpo.orderservice.product.ProductService;
-import limpo.orderservice.product.ProductRepository;
+import limpo.orderservice.order.repository.OrderRepository;
+import limpo.orderservice.order.model.Order;
+import limpo.orderservice.order.model.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,23 +16,18 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private ClientService clientService;
-
-    @Autowired
-    private ProductService productService;
-
     /**
      * This method returns the enum status value from a string
+     *
      * @param statusFilter Status name
      * @return Status enum value
      */
     private Status getStatus(String statusFilter) {
         Status status;
         switch (statusFilter) {
+            case "NEW":
+                status = Status.NEW;
+                break;
             case "PENDING":
                 status = Status.PENDING;
                 break;
@@ -46,52 +38,48 @@ public class OrderService {
                 status = Status.COMPLETED;
                 break;
             default:
-                status = Status.NEW;
+                status = Status.ALL;
         }
         return status;
     }
 
-    // TODO: 25/07/2021 - Throw an error when product was not found 
     /**
-     * The method creates an ProductItem objects out of Product object
-     * @param order An order with products
-     * @return List of product items
-     */
-    private ArrayList<ProductItem> getItems(Order order) {
-        //Enter product items
-        ArrayList<ProductItem> items = new ArrayList<ProductItem>();
-        for (ProductItem p : order.getProductItems()) {
-            Product product = productService.getProductById(p.getProduct().getId());
-            ProductItem item = new ProductItem();
-            item.setProduct(product);
-            item.setQuantity(p.getQuantity());
-            item.setPrice(p.getPrice());
-            items.add(item);
-        }
-        return items;
-    }
-
-    /**
-     * Get all orders
-     */
-    public ArrayList<Order> getAllOrders() {
-        return (ArrayList<Order>) orderRepository.findAll();
-    }
-
-    /**
-     * Get all orders based on a status filter - example (statusFilter = "PENDING")
+     * Get all orders, based on a status filter
+     * example (statusFilter = "PENDING")
+     *
      * @param statusFilter status criteria
      */
-    public ArrayList<Order> getAllOrders(String statusFilter) {
+    public ArrayList<Order> getAllOrders(String statusFilter, int startIndex) {
 
         Status status = getStatus(statusFilter);
 
-        return (ArrayList<Order>) orderRepository.findAllOrdersByStatus(status);
+        if (status == Status.ALL) {
+            return (ArrayList<Order>) orderRepository.findAll(startIndex);
+        }
+
+        return (ArrayList<Order>) orderRepository.findAllOrdersByStatus(status.ordinal(), startIndex);
     }
 
+    /**
+     * Get all orders count, based on a status filter
+     * example (statusFilter = "PENDING")
+     *
+     * @param statusFilter status criteria
+     */
+    public int getOrdersCount(String statusFilter) {
+
+        Status status = getStatus(statusFilter);
+
+        if (status == Status.ALL) {
+            return orderRepository.findAllOrdersCount();
+        }
+
+        return orderRepository.findAllOrdersCountByStatus(status);
+    }
 
     /**
      * Get an order by its order number
+     *
      * @param orderNumber Order number string
      * @return Order
      */
@@ -99,35 +87,28 @@ public class OrderService {
         return orderRepository.findByOrderNumber(orderNumber).orElse(null);
     }
 
+    /**
+     * Create an order
+     *
+     * @param order Order object
+     * @return Created order
+     */
     public Order createOrder(Order order) {
         String createdAt = new SimpleDateFormat("dd.MM.yyyy/HH:mm").format(new Date());
 
         order.setStatus(Status.NEW);
         order.setCreatedAt(createdAt);
 
-        // Check if client exists
-        Client client = clientService.getClientByEmail(order.getClient().getEmail());
-
-        // If such client does not exist, we add new client
-        if (client == null) {
-            client = clientService.addNewClient(order.getClient());
-        }
-
-        // Extract items
-        ArrayList<ProductItem> items = getItems(order);
-
-        order.setClient(client);
-        order.setProductItems(items);
-
-        Order createdOrder =  orderRepository.save(order);
-        createdOrder.setOrderNumber(new SimpleDateFormat("ddMMyyyy").format(new Date())+"L"+createdOrder.getId());
+        Order createdOrder = orderRepository.save(order);
+        createdOrder.setOrderNumber(new SimpleDateFormat("ddMMyyyy").format(new Date()) + "L" + createdOrder.getId());
         return orderRepository.save(createdOrder);
     }
 
     /**
      * Update order status
+     *
      * @param orderNumber Order number string
-     * @param status Status to be promoted
+     * @param status      Status to be promoted
      * @return Updated order
      */
     public Order updateOrder(String orderNumber, String status) {
@@ -140,11 +121,12 @@ public class OrderService {
             return updatedOrder;
         }
 
-        return new Order();
+        return null;
     }
 
     /**
-     * Delete an order by its order number
+     * Delete an order by order number
+     *
      * @param orderNumber Order number string
      * @return Deleted order
      */
