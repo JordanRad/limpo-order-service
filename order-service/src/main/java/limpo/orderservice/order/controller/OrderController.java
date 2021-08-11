@@ -1,12 +1,10 @@
 package limpo.orderservice.order.controller;
 
-import limpo.orderservice.client.model.Client;
+import limpo.orderservice.client.dto.Client;
 import limpo.orderservice.client.service.ClientService;
-import limpo.orderservice.order.model.Order;
-import limpo.orderservice.order.model.ProductItem;
+import limpo.orderservice.limpounit.service.LimpoUnitService;
+import limpo.orderservice.order.dto.Order;
 import limpo.orderservice.order.service.OrderService;
-import limpo.orderservice.product.model.Product;
-import limpo.orderservice.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,27 +25,8 @@ public class OrderController {
     private ClientService clientService;
 
     @Autowired
-    private ProductService productService;
+    private LimpoUnitService limpoUnitService;
 
-    /**
-     * The method creates an ProductItem objects out of Product object
-     *
-     * @param order An order with products
-     * @return List of product items
-     */
-    private ArrayList<ProductItem> getItems(Order order) {
-        // Enter product items
-        ArrayList<ProductItem> items = new ArrayList<ProductItem>();
-        for (ProductItem p : order.getProductItems()) {
-            Product product = productService.getProductById(p.getProduct().getId());
-            ProductItem item = new ProductItem();
-            item.setProduct(product);
-            item.setQuantity(p.getQuantity());
-            item.setPrice(p.getPrice());
-            items.add(item);
-        }
-        return items;
-    }
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllOrders(@RequestParam int startIndex) {
@@ -92,25 +71,8 @@ public class OrderController {
             client = clientService.createClient(order.getClient());
         }
 
-        // Check the product items in the database
-        // The unknown ones will be added as null
-        ArrayList<ProductItem> items = this.getItems(order);
-
-        // Check if unknown item(s) is/are in the list
-        ArrayList<Long> unknownItemIds = new ArrayList<>();
-        for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).getProduct() == null) {
-                unknownItemIds.add(order.getProductItems().get(i).getProduct().getId());
-            }
-        }
-
-        if (unknownItemIds.size() != 0) {
-            // Return 404 - Not Found with the unknown ids
-            return new ResponseEntity<>(unknownItemIds, HttpStatus.NOT_FOUND);
-        }
 
         order.setClient(client);
-        order.setProductItems(items);
 
         Order createdOrder = orderService.createOrder(order);
 

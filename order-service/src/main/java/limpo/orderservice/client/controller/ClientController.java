@@ -1,7 +1,7 @@
 package limpo.orderservice.client.controller;
 
 import limpo.orderservice.client.service.ClientService;
-import limpo.orderservice.client.model.Client;
+import limpo.orderservice.client.dto.Client;
 import limpo.orderservice.client.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,9 +26,9 @@ public class ClientController {
     public ResponseEntity<?> getAllClients() {
         List<Client> result = clientService.getAllClients();
         if (result.isEmpty()) {
-            return new ResponseEntity("Clients cannot be found", HttpStatus.OK);
+            return new ResponseEntity<>("Clients cannot be found", HttpStatus.OK);
         }
-        return new ResponseEntity(result, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

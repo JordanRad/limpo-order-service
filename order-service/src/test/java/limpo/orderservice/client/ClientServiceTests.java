@@ -1,6 +1,6 @@
 package limpo.orderservice.client;
 
-import limpo.orderservice.client.model.Client;
+import limpo.orderservice.client.dto.Client;
 import limpo.orderservice.client.repository.ClientRepository;
 import limpo.orderservice.client.service.ClientService;
 import org.junit.jupiter.api.Assertions;
@@ -11,7 +11,6 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
 
 

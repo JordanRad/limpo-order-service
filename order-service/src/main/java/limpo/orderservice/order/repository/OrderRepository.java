@@ -1,7 +1,7 @@
 package limpo.orderservice.order.repository;
 
-import limpo.orderservice.order.model.Order;
-import limpo.orderservice.order.model.Status;
+import limpo.orderservice.order.dto.Order;
+import limpo.orderservice.order.dto.Status;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

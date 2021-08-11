@@ -1,4 +1,4 @@
-package limpo.orderservice.client.model;
+package limpo.orderservice.client.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,14 +27,14 @@ public class Client {
 
     private String address;
 
-    @Column(columnDefinition = "varchar(255) default 'X'")
+    @Column(columnDefinition = "varchar(255) default 'X'",unique = true)
     private String phone;
 
     @Column(columnDefinition = "varchar(255) default 'X'")
     private Long bulstat;
 
     @Column(columnDefinition = "varchar(255) default 'X'")
-    private String VATNumber;
+    private String vatNumber;
 
     @Column(columnDefinition = "varchar(255) default 'Individual'")
     private String type;

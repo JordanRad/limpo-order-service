@@ -1,8 +1,8 @@
 package limpo.orderservice;
 
 import limpo.orderservice.client.controller.ClientController;
+import limpo.orderservice.limpounit.controller.LimpoUnitController;
 import limpo.orderservice.order.controller.OrderController;
-import limpo.orderservice.product.controller.ProductController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +19,7 @@ class OrderServiceApplicationTests {
 	private OrderController orderController;
 
 	@Autowired
-	private ProductController productController;
+	private LimpoUnitController limpoUnitController;
 
 	@Test
 	void contextLoads() {

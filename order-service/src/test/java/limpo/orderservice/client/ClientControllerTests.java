@@ -1,6 +1,6 @@
 package limpo.orderservice.client;
 
-import limpo.orderservice.client.model.Client;
+import limpo.orderservice.client.dto.Client;
 import limpo.orderservice.client.repository.ClientRepository;
 import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;

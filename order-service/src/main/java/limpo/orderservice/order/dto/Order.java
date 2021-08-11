@@ -1,6 +1,7 @@
-package limpo.orderservice.order.model;
+package limpo.orderservice.order.dto;
 
-import limpo.orderservice.client.model.Client;
+import limpo.orderservice.client.dto.Client;
+import limpo.orderservice.order.dto.OrderItem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,7 @@ public class Order {
     private String orderNumber;
 
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<ProductItem> productItems;
+    private List<OrderItem> orderItems;
 
     @OneToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")

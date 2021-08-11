@@ -1,12 +1,11 @@
 package limpo.orderservice.client.service;
 
-import limpo.orderservice.client.model.Client;
+import limpo.orderservice.client.dto.Client;
 import limpo.orderservice.client.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class ClientService {
@@ -74,7 +73,7 @@ public class ClientService {
         updatedClient.setEmail(client.getEmail());
         updatedClient.setBulstat(client.getBulstat());
         updatedClient.setType(client.getType());
-        updatedClient.setVATNumber(client.getVATNumber());
+        updatedClient.setVatNumber(client.getVatNumber());
 
         try {
             clientRepository.save(updatedClient);
