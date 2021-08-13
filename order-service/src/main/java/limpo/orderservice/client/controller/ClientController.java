@@ -25,9 +25,7 @@ public class ClientController {
     @GetMapping
     public ResponseEntity<?> getAllClients() {
         List<Client> result = clientService.getAllClients();
-        if (result.isEmpty()) {
-            return new ResponseEntity<>("Clients cannot be found", HttpStatus.OK);
-        }
+
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -35,29 +33,21 @@ public class ClientController {
     public ResponseEntity<?> getClient(@PathVariable("id") Long id) {
         Client result = clientService.getClientById(id);
         if (result == null) {
-            return new ResponseEntity<>("No client with " + id + " cannot be found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Client with " + id + " cannot be found", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<?> addNewClient(@RequestBody Client client) {
         Client result = clientService.createClient(client);
         if (client.getFirstName()== null) {
-            return new ResponseEntity<>("Problem occured with creating new client", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Problem occurred with creating new client", HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteClient(@PathVariable Long id) {
-        Long result = clientService.deleteClient(id);
-        if (result == null) {
-            return new ResponseEntity<>("Client with id " + id + " cannot be found", HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateClient(@PathVariable Long id, @RequestBody Client client) {
@@ -68,6 +58,15 @@ public class ClientController {
         if (result.getEmail() == null) {
 
             return new ResponseEntity<>("Client with this email already exists", HttpStatus.CONFLICT);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteClient(@PathVariable Long id) {
+        Long result = clientService.deleteClient(id);
+        if (result == null) {
+            return new ResponseEntity<>("Client with id " + id + " cannot be found", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
