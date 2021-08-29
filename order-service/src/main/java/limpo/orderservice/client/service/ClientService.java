@@ -74,6 +74,7 @@ public class ClientService {
         updatedClient.setBulstat(client.getBulstat());
         updatedClient.setType(client.getType());
         updatedClient.setVatNumber(client.getVatNumber());
+        updatedClient.setPhone(client.getPhone());
 
         try {
             clientRepository.save(updatedClient);

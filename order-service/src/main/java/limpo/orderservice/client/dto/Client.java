@@ -19,24 +19,19 @@ public class Client {
     @Column(unique = true)
     private String email;
 
-    @Column(columnDefinition = "varchar(255) default 'X'")
     private String firstName;
 
-    @Column(columnDefinition = "varchar(255) default 'X'")
     private String lastName;
 
     private String address;
 
-    @Column(columnDefinition = "varchar(255) default 'X'",unique = true)
+    @Column(unique = true)
     private String phone;
 
-    @Column(columnDefinition = "varchar(255) default 'X'")
     private Long bulstat;
 
-    @Column(columnDefinition = "varchar(255) default 'X'")
     private String vatNumber;
 
-    @Column(columnDefinition = "varchar(255) default 'Individual'")
     private String type;
 
 }

@@ -1,8 +1,9 @@
 package limpo.orderservice.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import limpo.orderservice.client.dto.Client;
 import limpo.orderservice.client.repository.ClientRepository;
-import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,9 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -32,6 +32,9 @@ public class ClientControllerTests {
 
     @Autowired
     private ClientRepository repository;
+
+    @Autowired
+    private ObjectMapper mapper;
 
     long clientId;
 
@@ -67,22 +70,12 @@ public class ClientControllerTests {
         repository.deleteAll();
     }
 
-    public String toJSONString(Client client) {
-        Map<String, String> map = new HashMap<>();
-        //map.put("id",Long.toString(client.getId()>0?client.getId():-1L));
-        map.put("firstName", client.getFirstName());
-        map.put("lastName", client.getLastName());
-        map.put("email", client.getEmail());
-        map.put("bulstat", Long.toString(client.getBulstat()));
-        map.put("address", client.getAddress());
-        map.put("phone", client.getPhone());
-
-        JSONObject object = new JSONObject(map);
-        return object.toJSONString();
+    public String toJSONString(Client client) throws JsonProcessingException {
+        return mapper.writeValueAsString(client);
     }
 
     @Test
-    public void Should_Return_All_Clients_And_Status_200() throws Exception {
+    public void shouldReturnAllClientsAndReturnStatus200() throws Exception {
         this.mockMvc.perform(get(URL))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -91,7 +84,7 @@ public class ClientControllerTests {
     }
 
     @Test
-    public void Should_Return_A_Client_And_Status_200() throws Exception {
+    public void shouldReturnAClientAndReturnStatus200() throws Exception {
         this.mockMvc.perform(get(URL + clientId))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -102,7 +95,31 @@ public class ClientControllerTests {
     }
 
     @Test
-    public void Should_Create_New_Client_And_Status_200() throws Exception {
+    public void shouldNotReturnAClientAndReturnStatus404() throws Exception {
+        this.mockMvc.perform(get(URL + 687334))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldNotCreateNewClientAndReturnStatus409() throws Exception {
+        Client client = new Client();
+        client.setBulstat(312418L);
+        client.setEmail("client@mail.com");
+        client.setAddress("Address");
+        client.setLastName("Client");
+        client.setFirstName("Client");
+        client.setPhone("0888888888");
+
+        this.mockMvc.perform(post(URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJSONString(client)))
+                .andDo(print())
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    public void shouldCreateNewClientAndReturnStatus200() throws Exception {
         Client client = new Client();
         client.setBulstat(312416L);
         client.setEmail("newclient@mail.com");
@@ -124,7 +141,51 @@ public class ClientControllerTests {
     }
 
     @Test
-    public void Should_Update_Client_And_Status_200() throws Exception {
+    public void shouldNotUpdateClientAndReturnStatus409ExistingEmail() throws Exception {
+        Client client = new Client();
+        client.setAddress("Updated Address");
+        client.setLastName("UpdateClient");
+        client.setFirstName("UpdateClient");
+        client.setPhone("066666666");
+        client.setBulstat(712416L);
+        client.setEmail("client@mail.com");
+
+        this.mockMvc.perform(put(URL + clientId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJSONString(client)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.firstName", is(client.getFirstName())))
+                .andExpect(jsonPath("$.email", is(client.getEmail())))
+                .andExpect(jsonPath("$.lastName", is(client.getLastName())))
+                .andExpect(jsonPath("$.address", is(client.getAddress())));
+    }
+
+    @Test
+    public void shouldNotUpdateClientAndReturnStatus409ExistingPhone() throws Exception {
+        Client client = new Client();
+        client.setAddress("Updated Address");
+        client.setLastName("UpdateClient");
+        client.setFirstName("UpdateClient");
+        client.setPhone("0888888888");
+        client.setBulstat(712416L);
+        client.setEmail("hello@mail.com");
+
+        this.mockMvc.perform(put(URL + clientId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJSONString(client)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.firstName", is(client.getFirstName())))
+                .andExpect(jsonPath("$.email", is(client.getEmail())))
+                .andExpect(jsonPath("$.lastName", is(client.getLastName())))
+                .andExpect(jsonPath("$.address", is(client.getAddress())));
+    }
+
+    @Test
+    public void shouldUpdateClientAndReturnStatus200() throws Exception {
         Client client = new Client();
         client.setAddress("Updated Address");
         client.setLastName("UpdateClient");
@@ -143,5 +204,40 @@ public class ClientControllerTests {
                 .andExpect(jsonPath("$.email", is(client.getEmail())))
                 .andExpect(jsonPath("$.lastName", is(client.getLastName())))
                 .andExpect(jsonPath("$.address", is(client.getAddress())));
+    }
+
+    @Test
+    public void shouldNotUpdateClientAndReturnStatus404() throws Exception {
+        Client client = new Client();
+        client.setAddress("Updated Address");
+        client.setLastName("UpdateClient");
+        client.setFirstName("UpdateClient");
+        client.setPhone("066666666");
+        client.setBulstat(712416L);
+        client.setEmail("updatedlient@mail.com");
+
+        this.mockMvc.perform(put(URL + 198986)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJSONString(client)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldDeleteClientAndReturnStatus200() throws Exception {
+
+        this.mockMvc.perform(MockMvcRequestBuilders.delete(URL + clientId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldNotDeleteClientAndReturnStatus404() throws Exception {
+
+        this.mockMvc.perform(MockMvcRequestBuilders.delete(URL + 8593427)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 }

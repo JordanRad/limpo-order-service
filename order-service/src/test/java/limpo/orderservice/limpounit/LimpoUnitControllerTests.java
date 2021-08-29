@@ -1,8 +1,9 @@
 package limpo.orderservice.limpounit;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import limpo.orderservice.limpounit.dto.LimpoUnit;
 import limpo.orderservice.limpounit.repository.LimpoUnitRepository;
-import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,9 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -33,6 +31,9 @@ public class LimpoUnitControllerTests {
 
     @Autowired
     private LimpoUnitRepository repository;
+
+    @Autowired
+    private ObjectMapper mapper;
 
     long limpoUnitId;
 
@@ -60,18 +61,12 @@ public class LimpoUnitControllerTests {
         repository.deleteAll();
     }
 
-    public String toJSONString(LimpoUnit limpoUnit) {
-        Map<String, String> map = new HashMap<>();
-        map.put("id", Long.toString(limpoUnit.getId() > 0 ? limpoUnit.getId() : -1L));
-        map.put("name", limpoUnit.getName());
-        map.put("description", limpoUnit.getDescription());
-
-        JSONObject object = new JSONObject(map);
-        return object.toJSONString();
+    public String toJSONString(LimpoUnit limpoUnit) throws JsonProcessingException {
+        return mapper.writeValueAsString(limpoUnit);
     }
 
     @Test
-    public void Should_Return_All_LimpoUnits_And_Status_200() throws Exception {
+    public void shouldReturnAllLimpoUnitsAndReturnStatus200() throws Exception {
         this.mockMvc.perform(get(URL))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -81,7 +76,7 @@ public class LimpoUnitControllerTests {
     }
 
     @Test
-    public void Should_Return_A_LimpoUnit_And_Status_200() throws Exception {
+    public void shouldReturnALimpoUnitAndReturnStatus200() throws Exception {
         this.mockMvc.perform(get(URL + limpoUnitId))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -91,7 +86,15 @@ public class LimpoUnitControllerTests {
     }
 
     @Test
-    public void Should_Create_New_LimpoUnit_And_Status_200() throws Exception {
+    public void shouldNotReturnALimpoUnitAndReturnStatus404() throws Exception {
+        this.mockMvc.perform(get(URL + 42242))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    public void shouldCreateNewLimpoUnitAndReturnStatus200() throws Exception {
         LimpoUnit limpoUnit = new LimpoUnit();
         limpoUnit.setName("New LimpoUnit");
         limpoUnit.setDescription("New Description");
@@ -107,7 +110,7 @@ public class LimpoUnitControllerTests {
     }
 
     @Test
-    public void Should_Not_Create_New_LimpoUnit_And_Status_409() throws Exception {
+    public void shouldNotCreateNewLimpoUnitAndReturnStatus409() throws Exception {
         LimpoUnit limpoUnit = new LimpoUnit();
         limpoUnit.setName("Test1");
         limpoUnit.setDescription("New Description");
@@ -117,19 +120,10 @@ public class LimpoUnitControllerTests {
                 .content(toJSONString(limpoUnit)))
                 .andDo(print())
                 .andExpect(status().isConflict());
-
     }
 
     @Test
-    public void Should_Delete_A_LimpoUnit_And_Status_200() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.delete(URL+limpoUnitId).contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-
-
-    @Test
-    public void Should_Update_LimpoUnit_And_Status_200() throws Exception {
+    public void shouldUpdateLimpoUnitAndReturnStatus200() throws Exception {
         LimpoUnit limpoUnit = new LimpoUnit();
         limpoUnit.setId(limpoUnitId);
         limpoUnit.setName("Updated LimpoUnit");
@@ -143,5 +137,47 @@ public class LimpoUnitControllerTests {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.name", is(limpoUnit.getName())))
                 .andExpect(jsonPath("$.description", is(limpoUnit.getDescription())));
+    }
+
+    @Test
+    public void shouldNotUpdateLimpoUnitAndReturnStatus409() throws Exception {
+        LimpoUnit limpoUnit = new LimpoUnit();
+        limpoUnit.setId(limpoUnitId);
+        limpoUnit.setName("Test2");
+        limpoUnit.setDescription("Updated Description");
+
+        this.mockMvc.perform(put(URL + limpoUnitId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJSONString(limpoUnit)))
+                .andDo(print())
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    public void shouldNotUpdateLimpoUnitAndReturnStatus404() throws Exception {
+        LimpoUnit limpoUnit = new LimpoUnit();
+        limpoUnit.setId(limpoUnitId);
+        limpoUnit.setName("Test2");
+        limpoUnit.setDescription("Updated Description");
+
+        this.mockMvc.perform(put(URL + 57929)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJSONString(limpoUnit)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldDeleteALimpoUnitAndReturnStatus200() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders.delete(URL+limpoUnitId).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldDeleteALimpoUnitAndReturnStatus404() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders.delete(URL+2462382).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 }

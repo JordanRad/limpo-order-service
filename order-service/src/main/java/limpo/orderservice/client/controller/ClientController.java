@@ -41,8 +41,9 @@ public class ClientController {
     @PostMapping("/")
     public ResponseEntity<?> addNewClient(@RequestBody Client client) {
         Client result = clientService.createClient(client);
-        if (client.getFirstName()== null) {
-            return new ResponseEntity<>("Problem occurred with creating new client", HttpStatus.CONFLICT);
+
+        if (result== null) {
+            return new ResponseEntity<>("Client with this email already exists", HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity<>(result, HttpStatus.CREATED);
@@ -56,8 +57,7 @@ public class ClientController {
             return new ResponseEntity<>("Client with id " + id + " cannot be found", HttpStatus.NOT_FOUND);
         }
         if (result.getEmail() == null) {
-
-            return new ResponseEntity<>("Client with this email already exists", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Client with this email or phone number already exists", HttpStatus.CONFLICT);
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
