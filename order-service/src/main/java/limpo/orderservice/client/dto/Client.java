@@ -23,6 +23,8 @@ public class Client {
 
     private String lastName;
 
+    private String corporateName;
+
     private String address;
 
     @Column(unique = true)
