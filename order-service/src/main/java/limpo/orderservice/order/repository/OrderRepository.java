@@ -15,10 +15,16 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
     @Query("SELECT o FROM Order o WHERE o.orderNumber = :orderNumber")
     Optional<Order> findByOrderNumber(String orderNumber);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM orders LIMIT 2 OFFSET :startIndex ;")
+    @Query("SELECT o FROM Order o WHERE o.orderNumber LIKE :searchInput% OR o.client.firstName LIKE :searchInput% OR o.client.lastName LIKE :searchInput% OR o.createdAt LIKE :searchInput%")
+    Collection<Order> findBySearchInput(String searchInput);
+
+    @Query("SELECT o FROM Order o WHERE o.status = :status AND o.orderNumber LIKE :searchInput% OR o.client.firstName LIKE :searchInput% OR o.client.lastName LIKE :searchInput% OR o.createdAt LIKE :searchInput%")
+    Collection<Order> findBySearchInputAndStatusFilter(String searchInput, Status status);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM orders LIMIT 5 OFFSET :startIndex ;")
     Collection<Order> findAll(int startIndex);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM orders o WHERE o.status = :status LIMIT 2 OFFSET :startIndex ;")
+    @Query(nativeQuery = true, value = "SELECT * FROM orders o WHERE o.status = :status LIMIT 5 OFFSET :startIndex ;")
     Collection<Order> findAllOrdersByStatus(int status,int startIndex);
 
     @Query("SELECT count(o) FROM Order o")

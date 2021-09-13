@@ -7,8 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 
 @Service
 public class OrderService {
@@ -85,6 +84,22 @@ public class OrderService {
      */
     public Order getOrderByNumber(String orderNumber) {
         return orderRepository.findByOrderNumber(orderNumber).orElse(null);
+    }
+
+    /**
+     * Get orders by order number,client's name or other order details
+     *
+     * @param searchInput Input string
+     * @param status Order status filter
+     * @return List<Order>
+     */
+    public List<Order> getOrdersBySearchInput(String searchInput,String status) {
+        Status statusFilter = getStatus(status);
+        if(statusFilter== Status.ALL){
+            return (List<Order>) orderRepository.findBySearchInput(searchInput);
+        }
+        return (List<Order>) orderRepository.findBySearchInputAndStatusFilter(searchInput,statusFilter);
+
     }
 
     /**

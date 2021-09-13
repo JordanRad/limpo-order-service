@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(OrderController.BASE_URL)
@@ -33,7 +34,6 @@ public class OrderController {
         ArrayList<Order> orders = orderService.getAllOrders("ALL",startIndex);
 
         return new ResponseEntity<>(orders, HttpStatus.OK);
-
     }
 
     @GetMapping("/")
@@ -61,16 +61,23 @@ public class OrderController {
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<?> getOrderBySearchInput(@RequestParam String searchInput, @RequestParam String status) {
+        List<Order> orders = orderService.getOrdersBySearchInput(searchInput,status);
+
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
     @PostMapping("/")
     public ResponseEntity<?> createOrder(@RequestBody Order order) {
         // Check if client exists
         Client client = clientService.getClientByEmail(order.getClient().getEmail());
 
+
         // If such client does not exist, we add new client
         if (client == null) {
             client = clientService.createClient(order.getClient());
         }
-
 
         order.setClient(client);
 
