@@ -37,6 +37,7 @@ public class ClientRepositoryTests {
         clientOne.setAddress("Toltoy");
         clientOne.setLastName("Manolov");
         clientOne.setFirstName("Moni");
+        clientOne.setPhone("0886");
 
         clientTwo = new Client();
         clientTwo.setBulstat(33131L);
@@ -61,19 +62,31 @@ public class ClientRepositoryTests {
     }
 
     @Test
+    public void shouldFindClientByEmailAndPhone(){
+        Client client = repository.findByEmailAndPhone(clientOne.getEmail(),clientOne.getPhone()).orElseThrow(NoSuchElementException::new);
+
+        Assertions.assertEquals(client.getAddress(), clientOne.getAddress());
+        Assertions.assertEquals(client.getBulstat(), clientOne.getBulstat());
+        Assertions.assertEquals(client.getEmail(), clientOne.getEmail());
+        Assertions.assertEquals(client.getFirstName(), clientOne.getFirstName());
+        Assertions.assertEquals(client.getLastName(), clientOne.getLastName());
+        Assertions.assertEquals(client.getPhone(), clientOne.getPhone());
+    }
+
+    @Test
     public void shouldNotFindClientByEmail(){
         Client client = repository.findByEmail("wrongEmail").orElse(null);
         Assertions.assertNull(client);
     }
 
     @Test
-    public void Should_Not_Get_Unknown_Client(){
+    public void shouldNotGetUnknownClient(){
         Client client = service.getClientById(976L);
         Assertions.assertNull(client);
     }
 
     @Test
-    public void Should_Get_All_Products(){
+    public void shouldGetAllClients(){
         ArrayList<Client> clients = (ArrayList<Client>)repository.findAll();
         Assertions.assertEquals(clients.size(),2);
         Assertions.assertEquals(clientOne, clients.get(0));
@@ -81,7 +94,7 @@ public class ClientRepositoryTests {
     }
 
     @Test
-    public void Should_Create_New_Product(){
+    public void shouldCreateNewClient(){
         Client client = new Client();
         client.setFirstName("Yordan");
         client.setLastName("Radushev");
@@ -98,7 +111,7 @@ public class ClientRepositoryTests {
     }
 
     @Test
-    public void Should_Update_A_Product(){
+    public void shouldUpdateAClient(){
         Long idOne = (Long) entityManager.getId(clientOne);
         var client = repository.findById(idOne).orElse(null);
 
@@ -110,7 +123,7 @@ public class ClientRepositoryTests {
     }
 
     @Test
-    public void Should_Delete_A_Product(){
+    public void shouldDeleteAClient(){
         Long idOne = (Long) entityManager.getId(clientOne);
         var client = repository.findById(idOne).get();
 

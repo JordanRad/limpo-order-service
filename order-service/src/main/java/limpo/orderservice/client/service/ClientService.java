@@ -23,12 +23,12 @@ public class ClientService {
     }
 
     /**
-     * Get a client by email
+     * Get a client by email and phone
      *
      * @return Client
      */
-    public Client getClientByEmail(String email) {
-        return clientRepository.findByEmail(email).orElse(null);
+    public Client getClientByUniquesFields(String email,String phone) {
+        return clientRepository.findByEmailAndPhone(email,phone).orElse(null);
     }
 
     /**

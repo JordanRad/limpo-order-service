@@ -71,14 +71,17 @@ public class OrderController {
     @PostMapping("/")
     public ResponseEntity<?> createOrder(@RequestBody Order order) {
         // Check if client exists
-        Client client = clientService.getClientByEmail(order.getClient().getEmail());
-
+        Client client = clientService.getClientByUniquesFields(order.getClient().getEmail(),order.getClient().getPhone());
 
         // If such client does not exist, we add new client
         if (client == null) {
             client = clientService.createClient(order.getClient());
         }
 
+        // If the client cannot be created, return status CONFLICT
+        if(client==null){
+            return new ResponseEntity<>("Client with this email/phone already exists", HttpStatus.CONFLICT);
+        }
         order.setClient(client);
 
         Order createdOrder = orderService.createOrder(order);
