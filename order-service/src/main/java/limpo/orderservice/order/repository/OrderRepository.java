@@ -15,10 +15,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT o FROM Order o WHERE o.orderNumber = :orderNumber")
     Optional<Order> findByOrderNumber(String orderNumber);
 
-    @Query("SELECT o FROM Order o WHERE o.orderNumber LIKE %:searchInput% OR o.client.firstName LIKE %:searchInput% OR o.client.lastName LIKE %:searchInput% OR o.createdAt LIKE %:searchInput%")
+    @Query("SELECT o FROM Order o WHERE o.orderNumber LIKE %:searchInput% OR o.client.firstName LIKE %:searchInput% OR o.client.lastName LIKE %:searchInput% OR o.createdAt LIKE %:searchInput% OR o.client.corporateName LIKE %:searchInput% OR o.client.bulstat LIKE %:searchInput% OR o.client.email LIKE %:searchInput% OR o.client.phone LIKE %:searchInput%")
     Collection<Order> findBySearchInput(String searchInput);
 
-    @Query("SELECT o FROM Order o WHERE o.status = :status AND o.orderNumber LIKE %:searchInput% OR o.client.firstName LIKE %:searchInput% OR o.client.lastName LIKE %:searchInput% OR o.createdAt LIKE %:searchInput%")
+    @Query("SELECT o FROM Order o WHERE o.status = :status AND (o.orderNumber LIKE %:searchInput% OR o.client.firstName LIKE %:searchInput% OR o.client.lastName LIKE %:searchInput% OR o.createdAt LIKE %:searchInput% OR o.client.corporateName LIKE %:searchInput% OR o.client.bulstat LIKE %:searchInput% OR o.client.email LIKE %:searchInput% OR o.client.phone LIKE %:searchInput%)")
     Collection<Order> findBySearchInputAndStatusFilter(String searchInput, Status status);
 
     @Query(nativeQuery = true, value = "SELECT * FROM orders LIMIT 5 OFFSET :startIndex ;")
