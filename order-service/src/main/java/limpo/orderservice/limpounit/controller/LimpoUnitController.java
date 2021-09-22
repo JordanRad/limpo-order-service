@@ -14,7 +14,7 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @RequestMapping(LimpoUnitController.BASE_URL)
 public class LimpoUnitController {
-    public static final String BASE_URL = "api/v1/order-service/limpoUnits";
+    public static final String BASE_URL = "api/v1/limpoUnits";
 
     @Autowired
     private LimpoUnitRepository repository;

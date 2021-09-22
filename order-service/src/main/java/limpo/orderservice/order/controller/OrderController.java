@@ -14,10 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(OrderController.BASE_URL)
 public class OrderController {
 
-    public static final String BASE_URL = "/api/v1/order-service/orders";
+    public static final String BASE_URL = "/api/v1/orders";
 
     @Autowired
     private OrderService orderService;

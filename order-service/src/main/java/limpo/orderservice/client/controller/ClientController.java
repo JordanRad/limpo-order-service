@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping(ClientController.BASE_URL)
 public class ClientController {
 
-    public static final String BASE_URL = "/api/v1/order-service/clients";
+    public static final String BASE_URL = "/api/v1/clients";
 
     @Autowired
     private ClientRepository repository;
