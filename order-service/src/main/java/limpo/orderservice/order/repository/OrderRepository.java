@@ -21,7 +21,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT o FROM Order o WHERE o.status = :status AND (o.orderNumber LIKE %:searchInput% OR o.client.firstName LIKE %:searchInput% OR o.client.lastName LIKE %:searchInput% OR o.createdAt LIKE %:searchInput% OR o.client.corporateName LIKE %:searchInput% OR o.client.bulstat LIKE %:searchInput% OR o.client.email LIKE %:searchInput% OR o.client.phone LIKE %:searchInput%)")
     Collection<Order> findBySearchInputAndStatusFilter(String searchInput, Status status);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM orders LIMIT 5 OFFSET :startIndex ;")
+    @Query(nativeQuery = true, value = "SELECT * FROM orders o WHERE o.status != 3 LIMIT 5 OFFSET :startIndex ;")
     Collection<Order> findAll(int startIndex);
 
     @Query(nativeQuery = true, value = "SELECT * FROM orders o WHERE o.status = :status LIMIT 5 OFFSET :startIndex ;")
