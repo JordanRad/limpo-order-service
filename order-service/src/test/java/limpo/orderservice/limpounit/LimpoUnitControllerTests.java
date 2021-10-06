@@ -37,7 +37,7 @@ public class LimpoUnitControllerTests {
 
     long limpoUnitId;
 
-    private final String URL = "/api/v1/order-service/limpoUnits/";
+    private final String URL = "/api/v1/limpoUnits/";
 
     @BeforeEach
     public void setup() {

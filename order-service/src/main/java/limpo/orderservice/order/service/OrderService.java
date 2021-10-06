@@ -1,9 +1,14 @@
 package limpo.orderservice.order.service;
 
+import limpo.orderservice.order.dto.OrdersPage;
 import limpo.orderservice.order.repository.OrderRepository;
 import limpo.orderservice.order.dto.Order;
 import limpo.orderservice.order.dto.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -91,14 +96,18 @@ public class OrderService {
      *
      * @param searchInput Input string
      * @param status Order status filter
-     * @return List<Order>
+     * @return Page<Order>
      */
-    public List<Order> getOrdersBySearchInput(String searchInput,String status) {
+    public Page<Order> getOrdersBySearchInput(String searchInput, String status, int pageNumber, int pageSize) {
         Status statusFilter = getStatus(status);
+
+        Pageable pageable  = PageRequest.of(pageNumber,pageSize, Sort.by("scheduledAt").ascending());
+
         if(statusFilter== Status.ALL){
-            return (List<Order>) orderRepository.findBySearchInput(searchInput);
+
+            return orderRepository.findBySearchInput(searchInput,pageable);
         }
-        return (List<Order>) orderRepository.findBySearchInputAndStatusFilter(searchInput,statusFilter);
+        return orderRepository.findBySearchInputAndStatusFilter(searchInput,statusFilter,pageable);
 
     }
 

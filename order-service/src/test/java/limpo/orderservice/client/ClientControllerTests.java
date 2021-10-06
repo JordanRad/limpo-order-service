@@ -38,7 +38,7 @@ public class ClientControllerTests {
 
     long clientId;
 
-    private final String URL = "/api/v1/order-service/clients/";
+    private final String URL = "/api/v1/clients/";
 
     @BeforeEach
     public void setup() {

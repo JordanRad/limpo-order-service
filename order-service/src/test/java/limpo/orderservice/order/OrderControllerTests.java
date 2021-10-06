@@ -53,7 +53,7 @@ public class OrderControllerTests {
 
     Client client;
 
-    private final String URL = "/api/v1/order-service/orders/";
+    private final String URL = "/api/v1/orders/";
 
     @BeforeEach
     public void setup() {

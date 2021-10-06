@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class OrderResponse {
+public class OrdersPage {
 
     private List<Order> orders;
 
@@ -19,6 +19,8 @@ public class OrderResponse {
 
     private int to;
 
-    private int all;
+    private int page;
+
+    private int total;
 
 }

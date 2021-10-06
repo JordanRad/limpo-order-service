@@ -4,12 +4,17 @@ import limpo.orderservice.client.dto.Client;
 import limpo.orderservice.client.service.ClientService;
 import limpo.orderservice.limpounit.service.LimpoUnitService;
 import limpo.orderservice.order.dto.Order;
+import limpo.orderservice.order.dto.OrdersPage;
 import limpo.orderservice.order.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,17 +37,17 @@ public class OrderController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllOrders(@RequestParam int startIndex) {
-        ArrayList<Order> orders = orderService.getAllOrders("ALL",startIndex);
+        ArrayList<Order> orders = orderService.getAllOrders("ALL", startIndex);
 
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
-    @GetMapping("/")
-    public ResponseEntity<?> getAllOrdersByStatus(@RequestParam int startIndex,@RequestParam String status) {
-        ArrayList<Order> orders = orderService.getAllOrders(status,startIndex);
-
-        return new ResponseEntity<>(orders, HttpStatus.OK);
-    }
+//    @GetMapping("/")
+//    public ResponseEntity<?> getAllOrdersByStatus(@RequestParam int startIndex,@RequestParam String status) {
+//        ArrayList<Order> orders = orderService.getAllOrders(status,startIndex);
+//
+//        return new ResponseEntity<>(orders, HttpStatus.OK);
+//    }
 
     @GetMapping("/count")
     public ResponseEntity<?> getOrdersCount(@RequestParam String status) {
@@ -62,17 +67,27 @@ public class OrderController {
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<?> getOrderBySearchInput(@RequestParam String searchInput, @RequestParam String status) {
-        List<Order> orders = orderService.getOrdersBySearchInput(searchInput,status);
+    @GetMapping("/")
+    public ResponseEntity<?> getOrderBySearchInput(@RequestParam String searchInput, @RequestParam String status, @RequestParam int pageNumber, @RequestParam int pageSize) {
+        Page<Order> orderPage = orderService.getOrdersBySearchInput(searchInput, status, pageNumber, pageSize);
 
-        return new ResponseEntity<>(orders, HttpStatus.OK);
+        int total = orderService.getOrdersCount(status);
+
+        OrdersPage page = new OrdersPage().toBuilder()
+                .page(pageNumber + 1)
+                .from((pageNumber * pageSize) + 1)
+                .to((total-((pageNumber+1)*pageSize)))
+                .orders(orderPage.getContent())
+                .total(total)
+                .build();
+
+        return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
     @PostMapping("/")
     public ResponseEntity<?> createOrder(@RequestBody Order order) {
         // Check if client exists
-        Client client = clientService.getClientByUniquesFields(order.getClient().getEmail(),order.getClient().getPhone());
+        Client client = clientService.getClientByUniquesFields(order.getClient().getEmail(), order.getClient().getPhone());
 
         // If such client does not exist, we add new client
         if (client == null) {
@@ -80,10 +95,18 @@ public class OrderController {
         }
 
         // If the client cannot be created, return status CONFLICT
-        if(client==null){
+        if (client == null) {
             return new ResponseEntity<>("Client with this email/phone already exists", HttpStatus.CONFLICT);
         }
         order.setClient(client);
+
+        // Set the timestamp
+        Timestamp scheduledAt = new Timestamp(order.getTimestamp());
+        order.setScheduledAt(scheduledAt);
+
+        // Set scheduledAtString property
+        String scheduledAtString = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(scheduledAt);
+        order.setScheduledAtString(scheduledAtString);
 
         Order createdOrder = orderService.createOrder(order);
 

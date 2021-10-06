@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
@@ -32,5 +34,12 @@ public class Order {
     private Client client;
 
     private Status status;
+
+    private String scheduledAtString;
+
+    private Timestamp scheduledAt;
+
+    @Transient
+    private long timestamp;
 
 }
