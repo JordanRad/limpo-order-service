@@ -12,11 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -42,12 +40,6 @@ public class OrderController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
-//    @GetMapping("/")
-//    public ResponseEntity<?> getAllOrdersByStatus(@RequestParam int startIndex,@RequestParam String status) {
-//        ArrayList<Order> orders = orderService.getAllOrders(status,startIndex);
-//
-//        return new ResponseEntity<>(orders, HttpStatus.OK);
-//    }
 
     @GetMapping("/count")
     public ResponseEntity<?> getOrdersCount(@RequestParam String status) {
@@ -73,10 +65,12 @@ public class OrderController {
 
         int total = orderService.getOrdersCount(status);
 
+        int to = (pageNumber+1)*pageSize;
+
         OrdersPage page = new OrdersPage().toBuilder()
                 .page(pageNumber + 1)
                 .from((pageNumber * pageSize) + 1)
-                .to((total-((pageNumber+1)*pageSize)))
+                .to(to)
                 .orders(orderPage.getContent())
                 .total(total)
                 .build();
