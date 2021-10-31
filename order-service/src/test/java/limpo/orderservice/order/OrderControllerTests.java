@@ -121,16 +121,6 @@ public class OrderControllerTests {
     }
 
     @Test
-    public void shouldReturnAllNewOrdersAndReturnStatus200() throws Exception {
-        this.mockMvc.perform(get(URL + "?startIndex=0&status=NEW"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(1)));
-
-    }
-
-    @Test
     public void shouldReturnSingleOrderAndReturnStatus200() throws Exception {
         this.mockMvc.perform(get(URL + orderOne.getOrderNumber()))
                 .andDo(print())
